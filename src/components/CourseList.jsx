@@ -35,7 +35,7 @@ const CourseList = () => {
             </h3>
             <p className="text-gray-600 mt-2">{course.description}</p>
             <Link
-              to={`/lessons/${course.courseId}`}
+              to={`/courses/${course.courseId}`}
               className="mt-4 inline-block bg-secondary text-primary px-4 py-2 rounded hover:bg-yellow-400"
             >
               View Lessons

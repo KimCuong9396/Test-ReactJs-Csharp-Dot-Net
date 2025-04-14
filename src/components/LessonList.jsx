@@ -13,7 +13,7 @@ const LessonList = () => {
         const response = await getLessons(courseId);
         setLessons(response.data);
       } catch (err) {
-        setError("Failed to load lessons");
+        setError(err.response?.data?.message || "Failed to load lessons");
       }
     };
     fetchLessons();
@@ -36,10 +36,10 @@ const LessonList = () => {
             </h3>
             <p className="text-gray-600 mt-2">{lesson.description}</p>
             <Link
-              to={`/quizzes/${lesson.lessonId}`}
+              to={`/lessons/${lesson.lessonId}`}
               className="mt-4 inline-block bg-secondary text-primary px-4 py-2 rounded hover:bg-yellow-400"
             >
-              View Quizzes
+              View word
             </Link>
           </div>
         ))}

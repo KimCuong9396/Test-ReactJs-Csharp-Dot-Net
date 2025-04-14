@@ -1,28 +1,33 @@
 import React, { useState, useEffect } from "react";
-import { getLesson, addFavoriteWord } from "../services/api";
+import { addFavoriteWord, getWordsByLesson } from "../services/api";
+import { useParams } from "react-router-dom";
 
-const WordList = ({ lessonId }) => {
+const WordList = () => {
+  const { lessonId } = useParams();
   const [words, setWords] = useState([]);
   const [error, setError] = useState("");
-
+  const [loading, setLoading] = useState(false);
   useEffect(() => {
     const fetchWords = async () => {
+      setLoading(true);
+      setError("");
       try {
-        const response = await getLesson(lessonId);
-        setWords(response.data.lessonWords.map((lw) => lw.word));
+        const response = await getWordsByLesson(lessonId);
+        setWords(response.data); // Trực tiếp sử dụng response.data vì nó là danh sách Word
       } catch (err) {
-        setError("Failed to load words");
+        setError(err.response?.data?.message || "Failed to load words");
+      } finally {
+        setLoading(false);
       }
     };
     fetchWords();
   }, [lessonId]);
-
   const handleAddFavorite = async (wordId) => {
     try {
       await addFavoriteWord({ wordId });
       alert("Added to favorites");
     } catch (err) {
-      setError("Failed to add favorite");
+      setError(err.response?.data?.message || "Failed to add favorite");
     }
   };
 
@@ -31,6 +36,10 @@ const WordList = ({ lessonId }) => {
       <h3 className="text-2xl font-bold text-primary mb-4">Words</h3>
       {error && (
         <div className="bg-red-100 text-red-700 p-2 rounded mb-4">{error}</div>
+      )}
+      {loading && <div className="text-gray-600">Loading words...</div>}
+      {!loading && words.length === 0 && !error && (
+        <div className="text-gray-600">No words available for this lesson.</div>
       )}
       <div className="space-y-4">
         {words.map((word) => (
@@ -42,11 +51,15 @@ const WordList = ({ lessonId }) => {
               {word.wordText}
             </h4>
             <div className="text-gray-600 mt-2">
-              {word.translations?.map((t) => (
-                <p key={t.translationId}>
-                  <strong>{t.language}:</strong> {t.meaning}
-                </p>
-              ))}
+              {word.translations?.length > 0 ? (
+                word.translations.map((t) => (
+                  <p key={t.translationId}>
+                    <strong>{t.language}:</strong> {t.meaning}
+                  </p>
+                ))
+              ) : (
+                <p>No translations available</p>
+              )}
             </div>
             <button
               onClick={() => handleAddFavorite(word.wordId)}

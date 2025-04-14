@@ -20,6 +20,8 @@ export const updateProfile = (data) => api.put("/Users/profile", data);
 export const getCourses = () => api.get("/Courses");
 export const getCourse = (id) => api.get(`/Courses/${id}`);
 export const getLessons = (courseId) => api.get(`/Lessons/course/${courseId}`);
+export const getWordsByLesson = (lessonId) =>
+  api.get(`Words/lesson/${lessonId}`);
 export const getLesson = (id) => api.get(`/Lessons/${id}`);
 export const getWords = () => api.get("/Words");
 export const searchWords = (keyword) =>

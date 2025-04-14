@@ -7,8 +7,11 @@ import Home from "./pages/Home";
 import Profile from "./pages/Profile";
 import Courses from "./pages/Courses";
 import Lessons from "./pages/Lessons";
-import Quizzes from "./pages/Quizzes";
+//import Quizzes from "./pages/Quizzes";
 import Dashboard from "./pages/Dashboard";
+import LessonDetail from "./components/LessonDetail";
+import LessonList from "./components/LessonList";
+import WordList from "./components/WordList";
 
 function App() {
   const [token, setToken] = useState(localStorage.getItem("token") || null);
@@ -41,13 +44,17 @@ function App() {
               element={token ? <Courses /> : <Navigate to="/login" />}
             />
             <Route
-              path="/lessons/:courseId"
-              element={token ? <Lessons /> : <Navigate to="/login" />}
+              path="/courses/:courseId"
+              element={token ? <LessonList /> : <Navigate to="/login" />}
             />
             <Route
+              path="/lessons/:lessonId"
+              element={token ? <WordList /> : <Navigate to="/login" />}
+            />
+            {/* <Route
               path="/quizzes/:lessonId"
               element={token ? <Quizzes /> : <Navigate to="/login" />}
-            />
+            /> */}
             <Route
               path="/dashboard"
               element={token ? <Dashboard /> : <Navigate to="/login" />}
