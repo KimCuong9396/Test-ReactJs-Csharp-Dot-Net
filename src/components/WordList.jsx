@@ -114,7 +114,7 @@ const WordList = () => {
     } else {
       toast.success("Hoàn thành bộ từ vựng!");
       setTimeout(() => {
-        navigate(`/courses`);
+        navigate(`/revise`);
       }, 1500);
     }
   };
