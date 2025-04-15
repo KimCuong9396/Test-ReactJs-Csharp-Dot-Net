@@ -13,7 +13,7 @@ const Profile = () => {
     const fetchProfile = async () => {
       try {
         const response = await getProfile();
-        console.log("check profile", response);
+        //console.log("check profile", response);
         setProfile(response.data);
         setFormData({
           fullName: response.data.fullName || "",

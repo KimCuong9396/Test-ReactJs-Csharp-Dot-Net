@@ -9,9 +9,9 @@ import Courses from "./pages/Courses";
 import Lessons from "./pages/Lessons";
 //import Quizzes from "./pages/Quizzes";
 import Dashboard from "./pages/Dashboard";
-import LessonDetail from "./components/LessonDetail";
 import LessonList from "./components/LessonList";
 import WordList from "./components/WordList";
+import Progress from "./components/Progress";
 
 function App() {
   const [token, setToken] = useState(localStorage.getItem("token") || null);
@@ -50,6 +50,10 @@ function App() {
             <Route
               path="/lessons/:lessonId"
               element={token ? <WordList /> : <Navigate to="/login" />}
+            />
+            <Route
+              path="/lessons/:lessonId/progress"
+              element={token ? <Progress /> : <Navigate to="/login" />}
             />
             {/* <Route
               path="/quizzes/:lessonId"

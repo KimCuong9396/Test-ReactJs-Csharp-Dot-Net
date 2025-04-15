@@ -39,5 +39,7 @@ export const reviewWord = (progressId) =>
 export const getStatistics = () => api.get("/Statistics");
 export const getSearchHistory = () => api.get("/DictionarySearches");
 export const addSearch = (data) => api.post("/DictionarySearches", data);
-
+export const getUserProgress = (lessonId) =>
+  api.get(`progress/lesson/${lessonId}`);
+export const updateUserProgress = (data) => api.post("/progress", data);
 export default api;
