@@ -10,7 +10,8 @@ const CourseList = () => {
     const fetchCourses = async () => {
       try {
         const response = await getCourses();
-        setCourses(response.data);
+        //console.log("API Response:", response.data); // Debug log
+        setCourses(response.data.$values || []); // Use $values, fallback to empty array
       } catch (err) {
         setError("Failed to load courses");
       }

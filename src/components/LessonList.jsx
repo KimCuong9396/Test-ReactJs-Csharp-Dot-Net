@@ -11,7 +11,7 @@ const LessonList = () => {
     const fetchLessons = async () => {
       try {
         const response = await getLessons(courseId);
-        setLessons(response.data);
+        setLessons(response.data.$values);
       } catch (err) {
         setError(err.response?.data?.message || "Failed to load lessons");
       }

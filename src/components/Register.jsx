@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import { register } from "../services/api";
 
 const Register = () => {
@@ -126,6 +126,17 @@ const Register = () => {
           {loading ? "Registering..." : "Register"}
         </button>
       </form>
+
+      {/* Phần liên kết đến trang login */}
+      <div className="mt-4 text-center text-gray-600">
+        Already have an account?{" "}
+        <Link
+          to="/login"
+          className="text-primary hover:text-indigo-700 font-medium"
+        >
+          Login here
+        </Link>
+      </div>
     </div>
   );
 };

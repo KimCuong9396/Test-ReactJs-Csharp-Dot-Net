@@ -1,21 +1,27 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import { login } from "../services/api";
 
 const Login = ({ onLogin }) => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true);
+    setError("");
+
     try {
       const response = await login({ username, password });
       onLogin(response.data.token);
       navigate("/dashboard");
     } catch (err) {
       setError(err.response?.data?.message || "Login failed");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -34,6 +40,7 @@ const Login = ({ onLogin }) => {
             onChange={(e) => setUsername(e.target.value)}
             className="w-full p-2 border rounded focus:outline-none focus:ring-2 focus:ring-primary"
             required
+            disabled={loading}
           />
         </div>
         <div className="mb-4">
@@ -44,15 +51,30 @@ const Login = ({ onLogin }) => {
             onChange={(e) => setPassword(e.target.value)}
             className="w-full p-2 border rounded focus:outline-none focus:ring-2 focus:ring-primary"
             required
+            disabled={loading}
           />
         </div>
         <button
           type="submit"
-          className="w-full bg-primary text-white p-2 rounded hover:bg-indigo-700"
+          className={`w-full bg-primary text-white p-2 rounded hover:bg-indigo-700 ${
+            loading ? "opacity-50 cursor-not-allowed" : ""
+          }`}
+          disabled={loading}
         >
-          Login
+          {loading ? "Logging in..." : "Login"}
         </button>
       </form>
+
+      {/* Phần liên kết đến trang đăng ký */}
+      <div className="mt-4 text-center text-gray-600">
+        Don't have an account yet?{" "}
+        <Link
+          to="/register"
+          className="text-primary hover:text-indigo-700 font-medium"
+        >
+          Register here
+        </Link>
+      </div>
     </div>
   );
 };

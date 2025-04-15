@@ -28,6 +28,9 @@ const Navbar = ({ token, onLogout }) => {
               <Link to="/courses" className="hover:text-secondary">
                 Courses
               </Link>
+              <Link to="/revise" className="hover:text-secondary">
+                Revise
+              </Link>
               <Link to="/dashboard" className="hover:text-secondary">
                 Dashboard
               </Link>

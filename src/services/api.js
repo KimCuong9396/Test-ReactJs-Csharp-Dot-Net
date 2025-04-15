@@ -42,4 +42,5 @@ export const addSearch = (data) => api.post("/DictionarySearches", data);
 export const getUserProgress = (lessonId) =>
   api.get(`progress/lesson/${lessonId}`);
 export const updateUserProgress = (data) => api.post("/progress", data);
+export const getAllLearnedProgress = async () => api.get("/progress/learned");
 export default api;

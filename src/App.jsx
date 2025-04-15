@@ -12,6 +12,7 @@ import Dashboard from "./pages/Dashboard";
 import LessonList from "./components/LessonList";
 import WordList from "./components/WordList";
 import Progress from "./components/Progress";
+import Revise from "./pages/Revise";
 
 function App() {
   const [token, setToken] = useState(localStorage.getItem("token") || null);
@@ -62,6 +63,10 @@ function App() {
             <Route
               path="/dashboard"
               element={token ? <Dashboard /> : <Navigate to="/login" />}
+            />
+            <Route
+              path="/revise"
+              element={token ? <Revise /> : <Navigate to="/login" />}
             />
           </Routes>
         </div>
