@@ -14,7 +14,7 @@ const Home = () => {
       <div className="flex space-x-4 mb-8">
         <Link
           to="/register"
-          className="bg-secondary text-primary px-6 py-3 rounded-full font-semibold hover:bg-yellow-400 transition"
+          className="bg-amber-100 text-primary px-6 py-3 rounded-full font-semibold hover:bg-yellow-400 transition"
         >
           Get Started
         </Link>
@@ -25,11 +25,6 @@ const Home = () => {
           Login
         </Link>
       </div>
-      <img
-        src="https://via.placeholder.com/400x300?text=Learn+with+Fun"
-        alt="Learn with Fun"
-        className="rounded-lg shadow-lg max-w-full h-auto"
-      />
     </div>
   );
 };

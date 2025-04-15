@@ -37,7 +37,7 @@ const Navbar = ({ token, onLogout }) => {
               <Link to="/profile" className="hover:text-secondary">
                 Profile
               </Link>
-              <span className="text-gray-200">Welcome, {username}</span>
+              <span className="text-cyan-500">Welcome, {username}</span>
               <button
                 onClick={onLogout}
                 className="bg-secondary text-primary px-3 py-1 rounded hover:bg-yellow-400"

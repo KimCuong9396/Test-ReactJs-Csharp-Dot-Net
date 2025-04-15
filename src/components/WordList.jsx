@@ -44,7 +44,7 @@ const WordList = () => {
         }, {});
         setProgress(progressMap);
       } catch (err) {
-        setError(err.response?.data?.message || "Không tải được dữ liệu");
+        setError(err.response?.data?.message || "Hiện chưa cập nhật từ vựng");
       } finally {
         setLoading(false);
       }
