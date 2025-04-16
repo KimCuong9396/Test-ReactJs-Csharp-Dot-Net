@@ -12,9 +12,9 @@ const DictionarySearch = () => {
     if (!keyword) return;
     try {
       const response = await searchWords(keyword);
-      setResults(response.data);
+      setResults(response.data.$values);
       const historyResponse = await getSearchHistory();
-      setHistory(historyResponse.data);
+      setHistory(historyResponse.data.$values);
       setError("");
     } catch (err) {
       setError(err.response?.data?.message || "Search failed");

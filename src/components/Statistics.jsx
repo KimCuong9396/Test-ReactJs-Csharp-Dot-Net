@@ -1,63 +1,220 @@
 import React, { useState, useEffect } from "react";
-import { getStatistics } from "../services/api";
+import { Bar } from "react-chartjs-2";
+import {
+  Chart as ChartJS,
+  CategoryScale,
+  LinearScale,
+  BarElement,
+  Title,
+  Tooltip,
+  Legend,
+} from "chart.js";
+import { getAllLearnedProgress } from "../services/api";
+import { toast } from "react-toastify";
+import { Link } from "react-router-dom";
+import ChartDataLabels from "chartjs-plugin-datalabels";
+
+// Đăng ký các thành phần của Chart.js và plugin
+ChartJS.register(
+  CategoryScale,
+  LinearScale,
+  BarElement,
+  Title,
+  Tooltip,
+  Legend,
+  ChartDataLabels
+);
 
 const Statistics = () => {
-  const [stats, setStats] = useState(null);
+  const [learnedWords, setLearnedWords] = useState([]);
+  const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
   useEffect(() => {
-    const fetchStats = async () => {
+    const fetchLearnedWords = async () => {
+      setLoading(true);
+      setError("");
       try {
-        const response = await getStatistics();
-        setStats(response.data);
+        const progressResponse = await getAllLearnedProgress();
+        setLearnedWords(progressResponse.data.$values);
       } catch (err) {
-        setError("Failed to load statistics");
+        setError(
+          err.response?.data?.message || "Không thể tải dữ liệu thống kê"
+        );
+        toast.error("Không thể tải dữ liệu thống kê");
+      } finally {
+        setLoading(false);
       }
     };
-    fetchStats();
+    fetchLearnedWords();
   }, []);
 
-  if (!stats) return null;
+  // Tạo gradient colors
+  const createGradient = (ctx, chartArea, colorStart, colorEnd) => {
+    const gradient = ctx.createLinearGradient(
+      0,
+      chartArea.bottom,
+      0,
+      chartArea.top
+    );
+    gradient.addColorStop(0, colorStart);
+    gradient.addColorStop(1, colorEnd);
+    return gradient;
+  };
+
+  // Dữ liệu cho biểu đồ
+  const chartData = {
+    labels: ["Cấp 1", "Cấp 2", "Cấp 3", "Cấp 4+"],
+    datasets: [
+      {
+        label: "Số từ",
+        data: [
+          learnedWords.filter((word) => word.memoryLevel === 1).length,
+          learnedWords.filter((word) => word.memoryLevel === 2).length,
+          learnedWords.filter((word) => word.memoryLevel === 3).length,
+          learnedWords.filter((word) => word.memoryLevel >= 4).length,
+        ],
+        borderWidth: 1,
+      },
+    ],
+  };
+
+  const chartOptions = {
+    responsive: true,
+    maintainAspectRatio: false,
+    animation: {
+      duration: 1500,
+      easing: "easeOutBounce",
+    },
+    plugins: {
+      legend: {
+        display: false, // Ẩn legend vì chỉ có một dataset
+      },
+      title: {
+        display: true,
+        text: "Thống kê từ vựng theo mức độ ghi nhớ",
+        font: {
+          size: 20,
+          family: "'Inter', sans-serif",
+          weight: "bold",
+        },
+        padding: {
+          top: 10,
+          bottom: 30,
+        },
+      },
+      tooltip: {
+        backgroundColor: "rgba(0, 0, 0, 0.8)",
+        titleFont: {
+          size: 14,
+          family: "'Inter', sans-serif",
+        },
+        bodyFont: {
+          size: 12,
+          family: "'Inter', sans-serif",
+        },
+        padding: 12,
+        cornerRadius: 8,
+      },
+      datalabels: {
+        display: true,
+        color: "#333",
+        font: {
+          weight: "bold",
+          size: 14,
+        },
+        formatter: (value) => (value > 0 ? value : ""),
+        anchor: "end",
+        align: "bottom",
+        offset: 10,
+      },
+    },
+    scales: {
+      x: {
+        grid: {
+          display: false,
+        },
+        ticks: {
+          font: {
+            size: 14,
+            family: "'Inter', sans-serif",
+            weight: "bold",
+          },
+        },
+      },
+      y: {
+        display: false, // Ẩn trục tung
+      },
+    },
+    elements: {
+      bar: {
+        borderRadius: 8,
+        borderSkipped: false,
+      },
+    },
+    onHover: (event, chartElement) => {
+      event.native.target.style.cursor = chartElement[0]
+        ? "pointer"
+        : "default";
+    },
+  };
+
+  // Thêm gradient background colors khi chart render
+  const plugins = [
+    {
+      id: "customGradient",
+      beforeDatasetDraw(chart) {
+        const { ctx, chartArea } = chart;
+        const dataset = chart.data.datasets[0];
+        dataset.backgroundColor = chart.data.labels.map((_, index) => {
+          const colorPairs = [
+            ["rgba(255, 99, 132, 0.8)", "rgba(255, 99, 132, 0.4)"],
+            ["rgba(54, 162, 235, 0.8)", "rgba(54, 162, 235, 0.4)"],
+            ["rgba(255, 206, 86, 0.8)", "rgba(255, 206, 86, 0.4)"],
+            ["rgba(153, 102, 255, 0.8)", "rgba(153, 102, 255, 0.4)"],
+          ];
+          return createGradient(
+            ctx,
+            chartArea,
+            colorPairs[index][0],
+            colorPairs[index][1]
+          );
+        });
+        dataset.borderColor = [
+          "rgba(255, 99, 132, 1)",
+          "rgba(54, 162, 235, 1)",
+          "rgba(255, 206, 86, 1)",
+          "rgba(153, 102, 255, 1)",
+        ];
+      },
+    },
+  ];
 
   return (
-    <div className="mt-8">
-      <h3 className="text-2xl font-bold text-primary mb-4">
-        Learning Statistics
-      </h3>
+    <div className="mt-2 max-w-4xl mx-auto p-0">
+      <Link
+        to="/revise"
+        className="text-primary hover:text-indigo-700 underline mb-4 inline-block"
+      >
+        Quay lại ôn tập
+      </Link>
+
+      {loading && <div className="text-gray-600 text-center">Đang tải...</div>}
       {error && (
-        <div className="bg-red-100 text-red-700 p-2 rounded mb-4">{error}</div>
+        <div className="bg-red-100 text-red-700 p-4 rounded mb-4">{error}</div>
       )}
-      <div className="bg-white p-6 rounded-lg shadow-md">
-        <h4 className="text-xl font-semibold text-gray-800 mb-4">
-          Your Progress
-        </h4>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <p className="text-gray-600">
-            Total Words Learned:{" "}
-            <span className="font-bold">{stats.totalWordsLearned}</span>
-          </p>
-          <p className="text-gray-600">
-            Mastered Words:{" "}
-            <span className="font-bold">{stats.masteredWords}</span>
-          </p>
-          <p className="text-gray-600">
-            Mastery Rate:{" "}
-            <span className="font-bold">{stats.masteryRate}%</span>
-          </p>
-          <p className="text-gray-600">
-            Words Due Today:{" "}
-            <span className="font-bold">{stats.wordsDueToday}</span>
-          </p>
-          <p className="text-gray-600">
-            Quizzes Completed:{" "}
-            <span className="font-bold">{stats.quizzesCompleted}</span>
-          </p>
-          <p className="text-gray-600">
-            Average Quiz Score:{" "}
-            <span className="font-bold">{stats.averageQuizScore}</span>
-          </p>
+      {!loading && !error && learnedWords.length === 0 && (
+        <div className="text-gray-600 text-center">
+          Chưa có dữ liệu thống kê. Hãy học từ vựng để xem thống kê!
         </div>
-      </div>
+      )}
+      {!loading && !error && learnedWords.length > 0 && (
+        <div className="bg-amber-100 p-6 rounded-lg shadow-lg">
+          <div style={{ height: "300px" }}>
+            <Bar data={chartData} options={chartOptions} plugins={plugins} />
+          </div>
+        </div>
+      )}
     </div>
   );
 };

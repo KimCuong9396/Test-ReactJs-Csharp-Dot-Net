@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { Routes, Route, Navigate, BrowserRouter } from "react-router-dom"; // Thêm BrowserRouter nếu bọc tại đây
+import React from "react";
+import { Routes, Route, Navigate, BrowserRouter } from "react-router-dom";
 import Navbar from "./components/Navbar";
 import Login from "./components/Login";
 import Register from "./components/Register";
@@ -7,34 +7,30 @@ import Home from "./pages/Home";
 import Profile from "./pages/Profile";
 import Courses from "./pages/Courses";
 import Lessons from "./pages/Lessons";
-//import Quizzes from "./pages/Quizzes";
-import Dashboard from "./pages/Dashboard";
+import Search from "./pages/Search";
 import LessonList from "./components/LessonList";
 import WordList from "./components/WordList";
 import Progress from "./components/Progress";
 import Revise from "./pages/Revise";
+import Statistics from "./components/Statistics";
+import Admin from "./pages/Admin";
+import { AuthProvider, AuthContext } from "./context/AuthContext";
+import { useContext } from "react";
+import ManageCourse from "./components/admin/ManageCourse";
+import ErrorBoundary from "./components/admin/ErrorBoundary";
 
 function App() {
-  const [token, setToken] = useState(localStorage.getItem("token") || null);
-
-  const handleLogin = (newToken) => {
-    setToken(newToken);
-    localStorage.setItem("token", newToken);
-  };
-
-  const handleLogout = () => {
-    setToken(null);
-    localStorage.removeItem("token");
-  };
+  // Lấy token và isPremium từ Context
+  const { token, isPremium } = useContext(AuthContext);
 
   return (
     <BrowserRouter>
       <div className="min-h-screen bg-background">
-        <Navbar token={token} onLogout={handleLogout} />
+        <Navbar />
         <div className="container mx-auto p-6">
           <Routes>
             <Route path="/" element={<Home />} />
-            <Route path="/login" element={<Login onLogin={handleLogin} />} />
+            <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
             <Route
               path="/profile"
@@ -56,17 +52,35 @@ function App() {
               path="/lessons/:lessonId/progress"
               element={token ? <Progress /> : <Navigate to="/login" />}
             />
-            {/* <Route
-              path="/quizzes/:lessonId"
-              element={token ? <Quizzes /> : <Navigate to="/login" />}
-            /> */}
             <Route
-              path="/dashboard"
-              element={token ? <Dashboard /> : <Navigate to="/login" />}
+              path="/search"
+              element={token ? <Search /> : <Navigate to="/login" />}
             />
             <Route
               path="/revise"
               element={token ? <Revise /> : <Navigate to="/login" />}
+            />
+            <Route
+              path="/statistics"
+              element={token ? <Statistics /> : <Navigate to="/login" />}
+            />
+            <Route
+              path="/admin"
+              element={
+                token && isPremium ? <Admin /> : <Navigate to="/dashboard" />
+              }
+            />
+            <Route
+              path="/admin/manage-courses"
+              element={
+                token && isPremium ? (
+                  <ErrorBoundary>
+                    <ManageCourse />
+                  </ErrorBoundary>
+                ) : (
+                  <Navigate to="/search" />
+                )
+              }
             />
           </Routes>
         </div>
@@ -75,4 +89,11 @@ function App() {
   );
 }
 
-export default App;
+// Bọc App trong AuthProvider
+export default function Root() {
+  return (
+    <AuthProvider>
+      <App />
+    </AuthProvider>
+  );
+}

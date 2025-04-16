@@ -1,8 +1,11 @@
-import React from "react";
+import React, { useContext } from "react";
 import { Link } from "react-router-dom";
 import { jwtDecode } from "jwt-decode";
+import { AuthContext } from "../context/AuthContext";
 
-const Navbar = ({ token, onLogout }) => {
+const Navbar = () => {
+  const { token, isPremium, handleLogout } = useContext(AuthContext);
+
   let username = "";
   if (token) {
     try {
@@ -31,15 +34,23 @@ const Navbar = ({ token, onLogout }) => {
               <Link to="/revise" className="hover:text-secondary">
                 Revise
               </Link>
-              <Link to="/dashboard" className="hover:text-secondary">
-                Dashboard
+              <Link to="/statistics" className="hover:text-secondary">
+                Statistic
+              </Link>
+              <Link to="/search" className="hover:text-secondary">
+                Search
               </Link>
               <Link to="/profile" className="hover:text-secondary">
                 Profile
               </Link>
+              {isPremium && (
+                <Link to="/admin" className="hover:text-secondary">
+                  Admin
+                </Link>
+              )}
               <span className="text-cyan-500">Welcome, {username}</span>
               <button
-                onClick={onLogout}
+                onClick={handleLogout}
                 className="bg-secondary text-primary px-3 py-1 rounded hover:bg-yellow-400"
               >
                 Logout

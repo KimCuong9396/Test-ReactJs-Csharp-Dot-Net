@@ -5,17 +5,13 @@ import FavoriteWords from "../components/FavoriteWords";
 import DictionarySearch from "../components/DictionarySearch";
 import QuizResultList from "../components/QuizResultList";
 
-const Dashboard = () => {
+const Search = () => {
   return (
     <div>
-      <h2 className="text-3xl font-bold text-primary mb-6">Dashboard</h2>
-      <ProgressList />
-      <Statistics />
-      <FavoriteWords />
+      <h2 className="text-3xl font-bold text-primary mb-6">Search</h2>
       <DictionarySearch />
-      <QuizResultList />
     </div>
   );
 };
 
-export default Dashboard;
+export default Search;

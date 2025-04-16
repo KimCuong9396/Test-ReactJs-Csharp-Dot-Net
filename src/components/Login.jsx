@@ -1,13 +1,15 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { login } from "../services/api";
+import { AuthContext } from "../context/AuthContext";
 
-const Login = ({ onLogin }) => {
+const Login = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
+  const { handleLogin } = useContext(AuthContext);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -16,8 +18,8 @@ const Login = ({ onLogin }) => {
 
     try {
       const response = await login({ username, password });
-      onLogin(response.data.token);
-      navigate("/dashboard");
+      handleLogin(response.data.token);
+      navigate("/search");
     } catch (err) {
       setError(err.response?.data?.message || "Login failed");
     } finally {
@@ -64,8 +66,6 @@ const Login = ({ onLogin }) => {
           {loading ? "Logging in..." : "Login"}
         </button>
       </form>
-
-      {/* Phần liên kết đến trang đăng ký */}
       <div className="mt-4 text-center text-gray-600">
         Don't have an account yet?{" "}
         <Link

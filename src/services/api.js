@@ -19,6 +19,9 @@ export const getProfile = () => api.get("/Users/profile");
 export const updateProfile = (data) => api.put("/Users/profile", data);
 export const getCourses = () => api.get("/Courses");
 export const getCourse = (id) => api.get(`/Courses/${id}`);
+export const DeleteCourse = (id) => api.delete(`/Courses/${id}`);
+export const CreateCourse = (data) => api.post("/Courses", data);
+export const UpdateCourse = (id, data) => api.put(`/Courses/${id}`, data);
 export const getLessons = (courseId) => api.get(`/Lessons/course/${courseId}`);
 export const getWordsByLesson = (lessonId) =>
   api.get(`Words/lesson/${lessonId}`);
