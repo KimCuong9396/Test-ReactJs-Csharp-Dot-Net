@@ -8,6 +8,7 @@ import {
 import CreateCourseModal from "./CreateCourseModal";
 import EditCourseModal from "./EditCourseModal";
 import DeleteConfirmModal from "./DeleteConfirmModal";
+import { FaEdit, FaTrash } from "react-icons/fa";
 
 const ManageCourse = () => {
   const [courses, setCourses] = useState([]);
@@ -118,24 +119,28 @@ const ManageCourse = () => {
                   </td>
                   <td className="px-4 py-2">{course.level || "N/A"}</td>
                   <td className="px-4 py-2">
-                    <button
-                      onClick={() => {
-                        setCurrentCourse(course);
-                        setShowEditModal(true);
-                      }}
-                      className="text-blue-600 hover:text-blue-800 mr-4"
-                    >
-                      Sửa
-                    </button>
-                    <button
-                      onClick={() => {
-                        setCourseToDelete(course);
-                        setShowDeleteModal(true);
-                      }}
-                      className="text-red-600 hover:text-red-800"
-                    >
-                      Xóa
-                    </button>
+                    <div className="flex items-center space-x-4">
+                      <button
+                        onClick={() => {
+                          setCurrentCourse(course);
+                          setShowEditModal(true);
+                        }}
+                        className="text-blue-600 hover:text-blue-800"
+                        title="Sửa" // Tooltip khi hover
+                      >
+                        <FaEdit size={20} /> {/* Icon chỉnh sửa */}
+                      </button>
+                      <button
+                        onClick={() => {
+                          setCourseToDelete(course);
+                          setShowDeleteModal(true);
+                        }}
+                        className="text-amber-500 hover:text-red-800"
+                        title="Xóa" // Tooltip khi hover
+                      >
+                        <FaTrash size={20} /> {/* Icon xóa */}
+                      </button>
+                    </div>
                   </td>
                 </tr>
               ))}

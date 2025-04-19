@@ -27,7 +27,7 @@ function App() {
     <BrowserRouter>
       <div className="min-h-screen bg-background">
         <Navbar />
-        <div className="container mx-auto p-6">
+        <div>
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/login" element={<Login />} />

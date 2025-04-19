@@ -19,7 +19,7 @@ const Login = () => {
     try {
       const response = await login({ username, password });
       handleLogin(response.data.token);
-      navigate("/search");
+      navigate("/");
     } catch (err) {
       setError(err.response?.data?.message || "Login failed");
     } finally {
@@ -28,52 +28,58 @@ const Login = () => {
   };
 
   return (
-    <div className="max-w-md mx-auto mt-10 p-6 bg-white rounded-lg shadow-lg">
-      <h2 className="text-2xl font-bold text-primary mb-4">Login</h2>
-      {error && (
-        <div className="bg-red-100 text-red-700 p-2 rounded mb-4">{error}</div>
-      )}
-      <form onSubmit={handleSubmit}>
-        <div className="mb-4">
-          <label className="block text-gray-700 mb-1">Username</label>
-          <input
-            type="text"
-            value={username}
-            onChange={(e) => setUsername(e.target.value)}
-            className="w-full p-2 border rounded focus:outline-none focus:ring-2 focus:ring-primary"
-            required
+    <div className="h-screen w-full bg-gradient-to-br from-indigo-500 via-purple-500 to-pink-500 flex items-center justify-center p-0 m-0 box-border pt-16">
+      <div className="w-full max-w-sm mx-4 bg-white bg-opacity-90 rounded-xl shadow-xl p-4">
+        <h2 className="text-2xl font-extrabold text-indigo-600 mb-2 text-center">
+          Sign In
+        </h2>
+        {error && (
+          <div className="bg-red-100 text-red-700 p-2 rounded-lg mb-2 text-center text-sm">
+            {error}
+          </div>
+        )}
+        <form onSubmit={handleSubmit}>
+          <div className="mb-1">
+            <label className="block text-gray-700 text-sm mb-1">Username</label>
+            <input
+              type="text"
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
+              className="w-full p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-400 transition-all duration-300 text-sm"
+              required
+              disabled={loading}
+            />
+          </div>
+          <div className="mb-2">
+            <label className="block text-gray-700 text-sm mb-1">Password</label>
+            <input
+              type="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              className="w-full p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-400 transition-all duration-300 text-sm"
+              required
+              disabled={loading}
+            />
+          </div>
+          <button
+            type="submit"
+            className={`w-full bg-yellow-400 text-indigo-900 p-2 rounded-lg font-bold text-base hover:bg-yellow-500 hover:scale-105 transition-all duration-300 shadow-md ${
+              loading ? "opacity-50 cursor-not-allowed" : ""
+            }`}
             disabled={loading}
-          />
+          >
+            {loading ? "Logging in..." : "Login"}
+          </button>
+        </form>
+        <div className="mt-2 text-center text-gray-600 text-sm">
+          Don't have an account yet?{" "}
+          <Link
+            to="/register"
+            className="text-indigo-600 hover:text-indigo-800 font-medium"
+          >
+            Register here
+          </Link>
         </div>
-        <div className="mb-4">
-          <label className="block text-gray-700 mb-1">Password</label>
-          <input
-            type="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            className="w-full p-2 border rounded focus:outline-none focus:ring-2 focus:ring-primary"
-            required
-            disabled={loading}
-          />
-        </div>
-        <button
-          type="submit"
-          className={`w-full bg-primary text-white p-2 rounded hover:bg-indigo-700 ${
-            loading ? "opacity-50 cursor-not-allowed" : ""
-          }`}
-          disabled={loading}
-        >
-          {loading ? "Logging in..." : "Login"}
-        </button>
-      </form>
-      <div className="mt-4 text-center text-gray-600">
-        Don't have an account yet?{" "}
-        <Link
-          to="/register"
-          className="text-primary hover:text-indigo-700 font-medium"
-        >
-          Register here
-        </Link>
       </div>
     </div>
   );

@@ -11,36 +11,33 @@ const Register = () => {
     preferredLanguage: "en",
   });
   const [error, setError] = useState("");
-  const [loading, setLoading] = useState(false); // Thêm loading để cải thiện UX
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setLoading(true); // Bật loading
-    setError(""); // Reset lỗi
+    setLoading(true);
+    setError("");
 
     try {
-      const response = await register(formData); // Gọi API
+      const response = await register(formData);
       console.log("Register response:", response.data);
 
-      // Kiểm tra response từ backend
       if (response.status === 200) {
-        // Backend trả về { userId, username, email }
         const { userId, username } = response.data;
         console.log(
           `Registration successful: User ${username} (ID: ${userId})`
         );
-        navigate("/login"); // Điều hướng đến login
+        navigate("/login");
       } else {
         setError("Unexpected response status: " + response.status);
       }
     } catch (err) {
-      // Xử lý lỗi từ Axios
       setError(
         err.response?.data?.message || err.message || "Registration failed"
       );
     } finally {
-      setLoading(false); // Tắt loading
+      setLoading(false);
     }
   };
 
@@ -49,93 +46,102 @@ const Register = () => {
   };
 
   return (
-    <div className="max-w-md mx-auto mt-10 p-6 bg-white rounded-lg shadow-lg">
-      <h2 className="text-2xl font-bold text-primary mb-4">Register</h2>
-      {error && (
-        <div className="bg-red-100 text-red-700 p-2 rounded mb-4">{error}</div>
-      )}
-      <form onSubmit={handleSubmit}>
-        <div className="mb-4">
-          <label className="block text-gray-700 mb-1">Username</label>
-          <input
-            type="text"
-            name="username"
-            value={formData.username}
-            onChange={handleChange}
-            className="w-full p-2 border rounded focus:outline-none focus:ring-2 focus:ring-primary"
-            required
-            disabled={loading}
-          />
-        </div>
-        <div className="mb-4">
-          <label className="block text-gray-700 mb-1">Password</label>
-          <input
-            type="password"
-            name="password"
-            value={formData.password}
-            onChange={handleChange}
-            className="w-full p-2 border rounded focus:outline-none focus:ring-2 focus:ring-primary"
-            required
-            disabled={loading}
-          />
-        </div>
-        <div className="mb-4">
-          <label className="block text-gray-700 mb-1">Email</label>
-          <input
-            type="email"
-            name="email"
-            value={formData.email}
-            onChange={handleChange}
-            className="w-full p-2 border rounded focus:outline-none focus:ring-2 focus:ring-primary"
-            required
-            disabled={loading}
-          />
-        </div>
-        <div className="mb-4">
-          <label className="block text-gray-700 mb-1">Full Name</label>
-          <input
-            type="text"
-            name="fullName"
-            value={formData.fullName}
-            onChange={handleChange}
-            className="w-full p-2 border rounded focus:outline-none focus:ring-2 focus:ring-primary"
-            disabled={loading}
-          />
-        </div>
-        <div className="mb-4">
-          <label className="block text-gray-700 mb-1">Preferred Language</label>
-          <select
-            name="preferredLanguage"
-            value={formData.preferredLanguage}
-            onChange={handleChange}
-            className="w-full p-2 border rounded focus:outline-none focus:ring-2 focus:ring-primary"
+    <div className="h-screen w-full bg-gradient-to-br from-indigo-500 via-purple-500 to-pink-500 flex items-center justify-center p-0 m-0 box-border pt-16">
+      <div className="w-full max-w-sm mx-4 bg-white bg-opacity-90 rounded-xl shadow-xl p-4">
+        <h2 className="text-2xl font-extrabold text-indigo-600 mb-0 text-center">
+          Create Your Account
+        </h2>
+        {error && (
+          <div className="bg-red-100 text-red-700 p-2 rounded-lg mb-1 text-center text-sm">
+            {error}
+          </div>
+        )}
+        <form onSubmit={handleSubmit}>
+          <div className="mb-1">
+            <label className="block text-gray-700 text-sm mb-1">Username</label>
+            <input
+              type="text"
+              name="username"
+              value={formData.username}
+              onChange={handleChange}
+              className="w-full p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-400 transition-all duration-300 text-sm"
+              required
+              disabled={loading}
+            />
+          </div>
+          <div className="mb-1">
+            <label className="block text-gray-700 text-sm mb-1">Password</label>
+            <input
+              type="password"
+              name="password"
+              value={formData.password}
+              onChange={handleChange}
+              className="w-full p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-400 transition-all duration-300 text-sm"
+              required
+              disabled={loading}
+            />
+          </div>
+          <div className="mb-1">
+            <label className="block text-gray-700 text-sm mb-1">Email</label>
+            <input
+              type="email"
+              name="email"
+              value={formData.email}
+              onChange={handleChange}
+              className="w-full p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-400 transition-all duration-300 text-sm"
+              required
+              disabled={loading}
+            />
+          </div>
+          <div className="mb-1">
+            <label className="block text-gray-700 text-sm mb-1">
+              Full Name
+            </label>
+            <input
+              type="text"
+              name="fullName"
+              value={formData.fullName}
+              onChange={handleChange}
+              className="w-full p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-400 transition-all duration-300 text-sm"
+              disabled={loading}
+            />
+          </div>
+          <div className="mb-2">
+            <label className="block text-gray-700 text-sm mb-1">
+              Preferred Language
+            </label>
+            <select
+              name="preferredLanguage"
+              value={formData.preferredLanguage}
+              onChange={handleChange}
+              className="w-full p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-400 transition-all duration-300 text-sm"
+              disabled={loading}
+            >
+              <option value="en">English</option>
+              <option value="vi">Vietnamese</option>
+              <option value="ja">Japanese</option>
+            </select>
+          </div>
+          <button
+            type="submit"
+            className={`w-full bg-yellow-400 text-indigo-900 p-2 rounded-lg font-bold text-base hover:bg-yellow-500 hover:scale-105 transition-all duration-300 shadow-md ${
+              loading ? "opacity-50 cursor-not-allowed" : ""
+            }`}
             disabled={loading}
           >
-            <option value="en">English</option>
-            <option value="vi">Vietnamese</option>
-            <option value="ja">Japanese</option>
-          </select>
-        </div>
-        <button
-          type="submit"
-          className={`w-full bg-primary text-white p-2 rounded hover:bg-indigo-700 ${
-            loading ? "opacity-50 cursor-not-allowed" : ""
-          }`}
-          disabled={loading}
-        >
-          {loading ? "Registering..." : "Register"}
-        </button>
-      </form>
+            {loading ? "Registering..." : "Register"}
+          </button>
+        </form>
 
-      {/* Phần liên kết đến trang login */}
-      <div className="mt-4 text-center text-gray-600">
-        Already have an account?{" "}
-        <Link
-          to="/login"
-          className="text-primary hover:text-indigo-700 font-medium"
-        >
-          Login here
-        </Link>
+        <div className="mt-2 text-center text-gray-600 text-sm">
+          Already have an account?{" "}
+          <Link
+            to="/login"
+            className="text-indigo-600 hover:text-indigo-800 font-medium"
+          >
+            Login here
+          </Link>
+        </div>
       </div>
     </div>
   );

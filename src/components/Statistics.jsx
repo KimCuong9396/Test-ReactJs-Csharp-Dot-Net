@@ -191,30 +191,45 @@ const Statistics = () => {
   ];
 
   return (
-    <div className="mt-2 max-w-4xl mx-auto p-0">
-      <Link
-        to="/revise"
-        className="text-primary hover:text-indigo-700 underline mb-4 inline-block"
-      >
-        Quay lại ôn tập
-      </Link>
+    <div className="min-h-screen w-full bg-gradient-to-br from-indigo-400 via-purple-400 to-pink-400 bg-opacity-80 flex justify-center items-start pt-20 px-4">
+      <div className="w-full max-w-4xl">
+        <Link
+          to="/revise"
+          className="inline-flex items-center gap-2 px-4 py-2 bg-amber-300 text-white rounded-full shadow-md hover:shadow-lg hover:scale-105 transition duration-300 font-semibold mb-2"
+        >
+          Quay lại ôn tập
+        </Link>
 
-      {loading && <div className="text-gray-600 text-center">Đang tải...</div>}
-      {error && (
-        <div className="bg-red-100 text-red-700 p-4 rounded mb-4">{error}</div>
-      )}
-      {!loading && !error && learnedWords.length === 0 && (
-        <div className="text-gray-600 text-center">
-          Chưa có dữ liệu thống kê. Hãy học từ vựng để xem thống kê!
+        <div>
+          {loading && (
+            <div className="text-gray-700 text-center py-6">Đang tải...</div>
+          )}
+
+          {error && (
+            <div className="bg-red-100 text-red-700 p-4 rounded mb-4 text-center">
+              {error}
+            </div>
+          )}
+
+          {!loading && !error && learnedWords.length === 0 && (
+            <div className="text-gray-700 text-center py-6">
+              Chưa có dữ liệu thống kê. Hãy học từ vựng để xem thống kê!
+            </div>
+          )}
+
+          {!loading && !error && learnedWords.length > 0 && (
+            <div className="bg-white p-4 sm:p-6 rounded-xl shadow-inner">
+              <div style={{ height: "300px" }}>
+                <Bar
+                  data={chartData}
+                  options={chartOptions}
+                  plugins={plugins}
+                />
+              </div>
+            </div>
+          )}
         </div>
-      )}
-      {!loading && !error && learnedWords.length > 0 && (
-        <div className="bg-amber-100 p-6 rounded-lg shadow-lg">
-          <div style={{ height: "300px" }}>
-            <Bar data={chartData} options={chartOptions} plugins={plugins} />
-          </div>
-        </div>
-      )}
+      </div>
     </div>
   );
 };
