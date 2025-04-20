@@ -13,9 +13,9 @@ const Admin = () => {
         const response = await axios.get(API_URL, {
           headers: { Authorization: `Bearer ${token}` },
         });
-        setCourses(response.data.$values);
+        setCourses(response.data.$values || response.data);
       } catch (err) {
-        console.error("Failed to fetch courses:", err);
+        console.error("Không thể tải danh sách khóa học:", err);
       }
     };
     fetchCourses();
@@ -23,11 +23,15 @@ const Admin = () => {
 
   return (
     <div className="container mx-auto p-6">
-      <h2 className="text-3xl font-bold text-primary mb-6">Admin Dashboard</h2>
+      <h2 className="text-3xl font-bold text-primary mb-6">
+        Bảng điều khiển Admin
+      </h2>
       <div className="bg-white p-6 rounded-lg shadow-md">
-        <p className="text-gray-600">Welcome to the Admin Dashboard!</p>
         <p className="text-gray-600">
-          This page is only accessible to premium users.
+          Chào mừng đến với Bảng điều khiển Admin!
+        </p>
+        <p className="text-gray-600">
+          Trang này chỉ dành cho người dùng cao cấp.
         </p>
         <div className="mt-4 space-y-2">
           <div>
@@ -46,16 +50,14 @@ const Admin = () => {
               Quản lý từ vựng
             </Link>
           </div>
-          {courses.map((course) => (
-            <div key={course.courseId}>
-              <Link
-                to={`/admin/manage-lessons/${course.courseId}`}
-                className="text-blue-600 hover:text-blue-800 font-semibold"
-              >
-                Quản lý bài học (Khóa: {course.title})
-              </Link>
-            </div>
-          ))}
+          <div>
+            <Link
+              to="/admin/manage-lessons"
+              className="text-blue-600 hover:text-blue-800 font-semibold"
+            >
+              Quản lý bài học
+            </Link>
+          </div>
         </div>
       </div>
     </div>

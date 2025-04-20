@@ -103,7 +103,7 @@ function App() {
               }
             />
             <Route
-              path="/admin/manage-lessons/:courseId"
+              path="/admin/manage-lessons"
               element={
                 token && isPremium ? (
                   <ErrorBoundary>
