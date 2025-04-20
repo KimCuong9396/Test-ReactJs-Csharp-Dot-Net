@@ -58,6 +58,22 @@ const Admin = () => {
               Quản lý bài học
             </Link>
           </div>
+          <div>
+            <Link
+              to="/admin/manage-users"
+              className="text-blue-600 hover:text-blue-800 font-semibold"
+            >
+              Quản lý tài khoản người dùng
+            </Link>
+          </div>
+          <div>
+            <Link
+              to="/admin/manage-progress"
+              className="text-blue-600 hover:text-blue-800 font-semibold"
+            >
+              Quản lý quá trình học
+            </Link>
+          </div>
         </div>
       </div>
     </div>

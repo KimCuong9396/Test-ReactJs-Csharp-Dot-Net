@@ -21,6 +21,8 @@ import ErrorBoundary from "./components/admin/ErrorBoundary";
 import { ProgressProvider } from "./context/ProgressContext";
 import VocabularyManager from "./components/admin/VocabularyManager";
 import LessonManager from "./components/admin/LessonManager";
+import UserManager from "./components/admin/UserManager";
+import ProgressManager from "./components/admin/ProgressManager";
 
 function App() {
   // Lấy token và isPremium từ Context
@@ -108,6 +110,30 @@ function App() {
                 token && isPremium ? (
                   <ErrorBoundary>
                     <LessonManager />
+                  </ErrorBoundary>
+                ) : (
+                  <Navigate to="/" />
+                )
+              }
+            />
+            <Route
+              path="/admin/manage-users"
+              element={
+                token && isPremium ? (
+                  <ErrorBoundary>
+                    <UserManager />
+                  </ErrorBoundary>
+                ) : (
+                  <Navigate to="/" />
+                )
+              }
+            />
+            <Route
+              path="/admin/manage-progress"
+              element={
+                token && isPremium ? (
+                  <ErrorBoundary>
+                    <ProgressManager />
                   </ErrorBoundary>
                 ) : (
                   <Navigate to="/" />
