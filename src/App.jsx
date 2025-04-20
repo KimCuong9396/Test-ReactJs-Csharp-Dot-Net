@@ -18,11 +18,13 @@ import { AuthProvider, AuthContext } from "./context/AuthContext";
 import { useContext } from "react";
 import ManageCourse from "./components/admin/ManageCourse";
 import ErrorBoundary from "./components/admin/ErrorBoundary";
+import { ProgressProvider } from "./context/ProgressContext";
+import VocabularyManager from "./components/admin/VocabularyManager";
+import LessonManager from "./components/admin/LessonManager";
 
 function App() {
   // Lấy token và isPremium từ Context
   const { token, isPremium } = useContext(AuthContext);
-
   return (
     <BrowserRouter>
       <div className="min-h-screen bg-background">
@@ -67,7 +69,13 @@ function App() {
             <Route
               path="/admin"
               element={
-                token && isPremium ? <Admin /> : <Navigate to="/dashboard" />
+                token && isPremium ? (
+                  <ErrorBoundary>
+                    <Admin />
+                  </ErrorBoundary>
+                ) : (
+                  <Navigate to="/" />
+                )
               }
             />
             <Route
@@ -78,7 +86,31 @@ function App() {
                     <ManageCourse />
                   </ErrorBoundary>
                 ) : (
-                  <Navigate to="/search" />
+                  <Navigate to="/" />
+                )
+              }
+            />
+            <Route
+              path="/admin/manage-vocabulary"
+              element={
+                token && isPremium ? (
+                  <ErrorBoundary>
+                    <VocabularyManager />
+                  </ErrorBoundary>
+                ) : (
+                  <Navigate to="/" />
+                )
+              }
+            />
+            <Route
+              path="/admin/manage-lessons/:courseId"
+              element={
+                token && isPremium ? (
+                  <ErrorBoundary>
+                    <LessonManager />
+                  </ErrorBoundary>
+                ) : (
+                  <Navigate to="/" />
                 )
               }
             />
@@ -93,7 +125,9 @@ function App() {
 export default function Root() {
   return (
     <AuthProvider>
-      <App />
+      <ProgressProvider>
+        <App />
+      </ProgressProvider>
     </AuthProvider>
   );
 }

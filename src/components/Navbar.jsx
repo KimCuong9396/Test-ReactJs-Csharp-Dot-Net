@@ -2,6 +2,7 @@ import React, { useState, useEffect, useContext } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { jwtDecode } from "jwt-decode";
 import { AuthContext } from "../context/AuthContext";
+import NotificationBell from "./NotificationBell";
 
 const Navbar = () => {
   const { token, isPremium, handleLogout } = useContext(AuthContext);
@@ -151,6 +152,7 @@ const Navbar = () => {
                     Admin
                   </Link>
                 )}
+                <NotificationBell />
                 {/* Dropdown for Welcome, Profile, and Logout */}
                 <div className="relative">
                   <span
@@ -287,6 +289,7 @@ const Navbar = () => {
                     Admin
                   </Link>
                 )}
+                <NotificationBell />
                 <div className="relative">
                   <span
                     className="text-yellow-300 font-semibold px-4 py-3 w-full text-center block"

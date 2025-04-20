@@ -46,4 +46,8 @@ export const getUserProgress = (lessonId) =>
   api.get(`progress/lesson/${lessonId}`);
 export const updateUserProgress = (data) => api.post("/progress", data);
 export const getAllLearnedProgress = async () => api.get("/progress/learned");
+export const deleteAllSearchHistory = async () =>
+  api.delete("/DictionarySearches");
+export const deleteSearchHistory = async (searchId) =>
+  api.delete(`/DictionarySearches/${searchId}`);
 export default api;

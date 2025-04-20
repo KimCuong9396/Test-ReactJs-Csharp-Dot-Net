@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import {
   getWordsByLesson,
@@ -8,10 +8,14 @@ import {
 } from "../services/api";
 import { toast } from "react-toastify";
 import Flashcard from "./Flashcard";
+import { ProgressContext } from "../context/ProgressContext";
+import { AuthContext } from "../context/AuthContext";
 
 const WordList = () => {
   const { lessonId } = useParams();
   const navigate = useNavigate();
+  const { updateWordProgress } = useContext(ProgressContext);
+  const { token } = useContext(AuthContext);
   const [words, setWords] = useState([]);
   const [progress, setProgress] = useState({});
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -21,12 +25,19 @@ const WordList = () => {
   const [isCompleted, setIsCompleted] = useState(false);
 
   useEffect(() => {
+    if (!token) {
+      navigate("/login");
+      toast.info("Vui lòng đăng nhập để học từ vựng!");
+      return;
+    }
+
     const fetchData = async () => {
       setLoading(true);
       setError("");
 
       try {
         const wordsResponse = await getWordsByLesson(lessonId);
+        console.log("lesson id", lessonId);
         const fetchedWords = wordsResponse.data.$values.map((word) => ({
           wordId: word.wordId,
           wordText: word.wordText,
@@ -59,7 +70,7 @@ const WordList = () => {
     };
 
     fetchData();
-  }, [lessonId]);
+  }, [lessonId, token, navigate]);
 
   const handleSpeak = (wordText, audioUrl) => {
     if (audioUrl) {
@@ -102,10 +113,17 @@ const WordList = () => {
       };
 
       const response = await updateUserProgress(updatedProgress);
+      // Update local progress
       setProgress((prev) => ({
         ...prev,
         [wordId]: response.data,
       }));
+      // Update ProgressContext for Revise and NotificationBell
+      const wordData = words.find((w) => w.wordId === wordId);
+      updateWordProgress(wordId, {
+        ...response.data,
+        word: wordData, // Include word details for Revise
+      });
       toast.success("Đã đánh dấu từ thuộc!");
       handleNext();
     } catch (err) {
@@ -150,6 +168,10 @@ const WordList = () => {
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, [isCompleted]);
+
+  if (!token) {
+    return null; // Render nothing while redirecting
+  }
 
   return (
     <div className="min-h-screen w-full bg-gradient-to-br from-indigo-400 via-purple-400 to-pink-400 bg-opacity-80 flex flex-col items-center justify-center pt-16 p-0 m-0 box-border">
