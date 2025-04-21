@@ -37,7 +37,6 @@ const WordList = () => {
 
       try {
         const wordsResponse = await getWordsByLesson(lessonId);
-        console.log("lesson id", lessonId);
         const fetchedWords = wordsResponse.data.$values.map((word) => ({
           wordId: word.wordId,
           wordText: word.wordText,
@@ -107,7 +106,7 @@ const WordList = () => {
         wordId,
         memoryLevel: currentProgress.memoryLevel + 1,
         lastReviewed: new Date().toISOString(),
-        nextReview: calculateNextReview(currentProgress.memoryLevel + 1),
+        nextReview: calculateNextReview(currentProgress.memoryLevel + 1, true),
         reviewCount: currentProgress.reviewCount + 1,
         status: "Learned",
       };
@@ -129,7 +128,46 @@ const WordList = () => {
     }
   };
 
-  const handleNext = () => {
+  const handleNext = async () => {
+    const wordId = words[currentIndex]?.wordId;
+    if (wordId) {
+      try {
+        const currentProgress = progress[wordId] || {
+          wordId,
+          memoryLevel: 0,
+          reviewCount: 0,
+          status: "NotLearned",
+        };
+
+        const updatedProgress = {
+          wordId,
+          memoryLevel: currentProgress.memoryLevel + 1,
+          lastReviewed: new Date().toISOString(),
+          nextReview: calculateNextReview(
+            currentProgress.memoryLevel + 1,
+            false
+          ),
+          reviewCount: currentProgress.reviewCount + 1,
+          status: "Learned",
+        };
+
+        const response = await updateUserProgress(updatedProgress);
+        setProgress((prev) => ({
+          ...prev,
+          [wordId]: response.data,
+        }));
+        const wordData = words.find((w) => w.wordId === wordId);
+        updateWordProgress(wordId, {
+          ...response.data,
+          word: wordData,
+        });
+      } catch (err) {
+        toast.error(
+          err.response?.data?.message || "Không cập nhật được tiến độ"
+        );
+      }
+    }
+
     if (currentIndex < words.length - 1) {
       setAnimate(true);
       setTimeout(() => {
@@ -146,9 +184,18 @@ const WordList = () => {
     }
   };
 
-  const calculateNextReview = (memoryLevel) => {
+  const calculateNextReview = (memoryLevel, isLearned) => {
     const now = new Date();
-    const daysToAdd = memoryLevel === 1 ? 1 : memoryLevel === 2 ? 3 : 7;
+    let daysToAdd;
+
+    if (isLearned) {
+      // Thời gian ôn tập dài hơn cho "Đã thuộc"
+      daysToAdd = memoryLevel === 1 ? 2 : memoryLevel === 2 ? 5 : 10;
+    } else {
+      // Thời gian ôn tập ngắn hơn cho "Tiếp tục"
+      daysToAdd = memoryLevel === 1 ? 1 : memoryLevel === 2 ? 3 : 7;
+    }
+
     now.setDate(now.getDate() + daysToAdd);
     return now.toISOString();
   };
@@ -172,7 +219,7 @@ const WordList = () => {
 
   return (
     <div className="min-h-screen bg-gray-100 flex flex-col items-center justify-center py-12 px-4">
-      <div className="w-full max-w-lg mx-auto bg-white rounded-xl shadow-sm p-6">
+      <div className="w-full max-w-lg mx-auto p-6">
         <div className="flex flex-col items-center">
           <div className="w-full bg-gray-200 h-2 rounded-full mb-6 overflow-hidden">
             <div

@@ -21,13 +21,13 @@ const Register = () => {
 
     try {
       const response = await register(formData);
-      console.log("Register response:", response.data);
+      //console.log("Register response:", response.data);
 
       if (response.status === 200) {
         const { userId, username } = response.data;
-        console.log(
-          `Registration successful: User ${username} (ID: ${userId})`
-        );
+        // console.log(
+        //   `Registration successful: User ${username} (ID: ${userId})`
+        // );
         navigate("/login");
       } else {
         setError("Unexpected response status: " + response.status);
@@ -83,6 +83,7 @@ const Register = () => {
               className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-700 transition-all duration-300 text-sm disabled:opacity-50"
               required
               disabled={loading}
+              autocomplete="off"
             />
           </div>
           <div className="mb-4">

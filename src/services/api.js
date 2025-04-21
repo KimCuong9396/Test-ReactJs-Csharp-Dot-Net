@@ -50,4 +50,6 @@ export const deleteAllSearchHistory = async () =>
   api.delete("/DictionarySearches");
 export const deleteSearchHistory = async (searchId) =>
   api.delete(`/DictionarySearches/${searchId}`);
+export const changePassword = async (passwordData) =>
+  api.put("/users/change-password", passwordData);
 export default api;

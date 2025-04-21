@@ -23,7 +23,7 @@ const Revise = () => {
   const location = useLocation();
 
   useEffect(() => {
-    console.log("learnedWords updated:", learnedWords);
+    //console.log("learnedWords updated:", learnedWords);
     if (!token) {
       navigate("/login");
       toast.info("Vui lòng đăng nhập để ôn tập từ vựng!");
@@ -128,7 +128,7 @@ const Revise = () => {
     setUserAnswer("");
     setShowResult(false);
     setIsCorrect(null);
-    console.log("Game started with words:", wordsToReview);
+    //console.log("Game started with words:", wordsToReview);
     navigate("/revise", { replace: true });
   };
 
@@ -137,7 +137,7 @@ const Revise = () => {
   };
 
   const handleCheckResult = async () => {
-    console.log("handleCheckResult called, userAnswer:", userAnswer);
+    // console.log("handleCheckResult called, userAnswer:", userAnswer);
     if (!userAnswer.trim()) {
       toast.error("Vui lòng nhập nghĩa của từ!");
       return;
@@ -153,11 +153,11 @@ const Revise = () => {
     const isAnswerCorrect =
       userAnswer.toLowerCase().trim() ===
       currentWord.word.mean.toLowerCase().trim();
-    console.log("Answer comparison:", {
-      userAnswer: userAnswer.toLowerCase().trim(),
-      correctAnswer: currentWord.word.mean.toLowerCase().trim(),
-      isAnswerCorrect,
-    });
+    // console.log("Answer comparison:", {
+    //   userAnswer: userAnswer.toLowerCase().trim(),
+    //   correctAnswer: currentWord.word.mean.toLowerCase().trim(),
+    //   isAnswerCorrect,
+    // });
 
     setIsCorrect(isAnswerCorrect);
     setShowResult(true);
@@ -203,7 +203,7 @@ const Revise = () => {
   };
 
   const handleContinue = async () => {
-    console.log("handleContinue called, currentWordIndex:", currentWordIndex);
+    //console.log("handleContinue called, currentWordIndex:", currentWordIndex);
     if (currentWordIndex + 1 < gameWords.length) {
       setCurrentWordIndex(currentWordIndex + 1);
       setUserAnswer("");
@@ -254,7 +254,7 @@ const Revise = () => {
             type="text"
             value={userAnswer}
             onChange={(e) => {
-              console.log("Input changed, new value:", e.target.value);
+              //console.log("Input changed, new value:", e.target.value);
               setUserAnswer(e.target.value);
             }}
             placeholder="Nhập nghĩa của từ..."
@@ -264,7 +264,7 @@ const Revise = () => {
           {!showResult ? (
             <button
               onClick={() => {
-                console.log("Xem kết quả button clicked");
+                //console.log("Xem kết quả button clicked");
                 handleCheckResult();
               }}
               className="bg-blue-700 text-white px-6 py-3 rounded-lg hover:bg-blue-800 focus:ring-2 focus:ring-blue-700 focus:ring-offset-2 transition duration-200 font-medium"

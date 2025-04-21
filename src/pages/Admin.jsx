@@ -23,57 +23,46 @@ const Admin = () => {
 
   return (
     <div className="container mx-auto p-6">
-      <h2 className="text-3xl font-bold text-primary mb-6">
-        Bảng điều khiển Admin
-      </h2>
-      <div className="bg-white p-6 rounded-lg shadow-md">
-        <p className="text-gray-600">
-          Chào mừng đến với Bảng điều khiển Admin!
-        </p>
-        <p className="text-gray-600">
-          Trang này chỉ dành cho người dùng cao cấp.
-        </p>
-        <div className="mt-4 space-y-2">
-          <div>
-            <Link
-              to="/admin/manage-courses"
-              className="text-blue-600 hover:text-blue-800 font-semibold"
-            >
-              Quản lý khóa học
-            </Link>
-          </div>
-          <div>
-            <Link
-              to="/admin/manage-vocabulary"
-              className="text-blue-600 hover:text-blue-800 font-semibold"
-            >
-              Quản lý từ vựng
-            </Link>
-          </div>
-          <div>
-            <Link
-              to="/admin/manage-lessons"
-              className="text-blue-600 hover:text-blue-800 font-semibold"
-            >
-              Quản lý bài học
-            </Link>
-          </div>
-          <div>
-            <Link
-              to="/admin/manage-users"
-              className="text-blue-600 hover:text-blue-800 font-semibold"
-            >
-              Quản lý tài khoản người dùng
-            </Link>
-          </div>
-          <div>
-            <Link
-              to="/admin/manage-progress"
-              className="text-blue-600 hover:text-blue-800 font-semibold"
-            >
-              Quản lý quá trình học
-            </Link>
-          </div>
+      <div className="mt-4 space-y-2">
+        <div>
+          <Link
+            to="/admin/manage-courses"
+            className="text-blue-600 hover:text-blue-800 font-semibold"
+          >
+            Quản lý khóa học
+          </Link>
+        </div>
+        <div>
+          <Link
+            to="/admin/manage-vocabulary"
+            className="text-blue-600 hover:text-blue-800 font-semibold"
+          >
+            Quản lý từ vựng
+          </Link>
+        </div>
+        <div>
+          <Link
+            to="/admin/manage-lessons"
+            className="text-blue-600 hover:text-blue-800 font-semibold"
+          >
+            Quản lý bài học
+          </Link>
+        </div>
+        <div>
+          <Link
+            to="/admin/manage-users"
+            className="text-blue-600 hover:text-blue-800 font-semibold"
+          >
+            Quản lý tài khoản người dùng
+          </Link>
+        </div>
+        <div>
+          <Link
+            to="/admin/manage-progress"
+            className="text-blue-600 hover:text-blue-800 font-semibold"
+          >
+            Quản lý quá trình học
+          </Link>
         </div>
       </div>
     </div>

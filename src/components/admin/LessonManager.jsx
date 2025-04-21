@@ -1,11 +1,10 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-
 const LessonManager = () => {
   const [lessons, setLessons] = useState([]);
-  const [courses, setCourses] = useState([]); // Lưu danh sách khóa học
-  const [filteredCourses, setFilteredCourses] = useState([]); // Khóa học đã lọc
-  const [searchQuery, setSearchQuery] = useState(""); // Từ khóa tìm kiếm khóa học
+  const [courses, setCourses] = useState([]);
+  const [filteredCourses, setFilteredCourses] = useState([]);
+  const [searchQuery, setSearchQuery] = useState("");
   const [formData, setFormData] = useState({
     courseId: "",
     title: "",
@@ -34,9 +33,9 @@ const LessonManager = () => {
         headers: { Authorization: `Bearer ${token}` },
       });
       setLessons(response.data.$values || response.data);
-      console.log("Đã tải danh sách bài học:", response.data); // Debugging
+      //console.log("Đã tải danh sách bài học:", response.data);
     } catch (err) {
-      window.alert(
+      win.error(
         err.response?.data?.message || "Không thể tải danh sách bài học"
       );
     }
@@ -50,10 +49,10 @@ const LessonManager = () => {
       const coursesData = response.data.$values || response.data;
       setCourses(coursesData);
       setFilteredCourses(coursesData);
-      console.log("Đã tải danh sách khóa học:", coursesData); // Debugging
+      //console.log("Đã tải danh sách khóa học:", coursesData);
     } catch (err) {
       console.error("Lỗi khi tải khóa học:", err);
-      window.alert(
+      win.error(
         err.response?.data?.message || "Không thể tải danh sách khóa học"
       );
     }
@@ -67,7 +66,6 @@ const LessonManager = () => {
       course.title.toLowerCase().includes(query)
     );
     setFilteredCourses(filtered);
-    // Nếu courseId hiện tại không nằm trong danh sách lọc, reset formData.courseId
     if (
       !filtered.some(
         (course) => course.courseId.toString() === formData.courseId
@@ -90,46 +88,46 @@ const LessonManager = () => {
       !formData.courseId ||
       !courses.some((c) => c.courseId.toString() === formData.courseId)
     ) {
-      window.alert("Vui lòng chọn một khóa học hợp lệ từ danh sách.");
+      win.error("Vui lòng chọn một khóa học hợp lệ từ danh sách.");
       return;
     }
     if (!formData.title) {
-      window.alert("Tiêu đề bài học là bắt buộc.");
+      win.error("Tiêu đề bài học là bắt buộc.");
       return;
     }
     if (formData.orderInCourse < 0) {
-      window.alert("Thứ tự trong khóa học phải là số không âm.");
+      win.error("Thứ tự trong khóa học phải là số không âm.");
       return;
     }
 
     try {
-      console.log("Gửi formData:", formData); // Debugging
+      //console.log("Gửi formData:", formData);
       if (editingId) {
         // Cập nhật bài học
         await axios.put(`${API_URL}/${editingId}`, formData, {
           headers: { Authorization: `Bearer ${token}` },
         });
-        window.alert("Cập nhật bài học thành công!");
+        win.success("Cập nhật bài học thành công!");
       } else {
         // Tạo bài học mới
         const response = await axios.post(API_URL, formData, {
           headers: { Authorization: `Bearer ${token}` },
         });
-        window.alert("Tạo bài học thành công!");
-        console.log("Phản hồi tạo bài học:", response.data); // Debugging
+        win.success("Tạo bài học thành công!");
+        //console.log("Phản hồi tạo bài học:", response.data);
       }
       // Đóng modal, reset form, và làm mới danh sách bài học
       closeModal();
       fetchLessons();
     } catch (err) {
       console.error("Lỗi khi gửi bài học:", err);
-      window.alert(err.response?.data?.message || "Thao tác thất bại");
+      win.error(err.response?.data?.message || "Thao tác thất bại");
     }
   };
 
   const handleEdit = async (id) => {
     try {
-      console.log("Lấy bài học với ID:", id); // Debugging
+      //console.log("Lấy bài học với ID:", id);
       const response = await axios.get(`${API_URL}/${id}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
@@ -143,33 +141,54 @@ const LessonManager = () => {
       });
       setEditingId(id);
       setIsModalOpen(true);
-      setSearchQuery(""); // Reset tìm kiếm
-      setFilteredCourses(courses); // Hiển thị tất cả khóa học
+      setSearchQuery("");
+      setFilteredCourses(courses);
     } catch (err) {
       console.error("Lỗi khi chỉnh sửa:", err);
-      window.alert(err.response?.data?.message || "Không thể lấy bài học");
+      win.error(err.response?.data?.message || "Không thể lấy bài học");
     }
   };
 
   const handleDelete = async (id) => {
-    if (!window.confirm("Bạn có chắc muốn xóa bài học này?")) return;
-
-    try {
-      await axios.delete(`${API_URL}/${id}`, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
-      window.alert("Xóa bài học thành công!");
-      fetchLessons();
-    } catch (err) {
-      window.alert(err.response?.data?.message || "Xóa bài học thất bại");
-    }
+    win.info(
+      <div>
+        <p>Bạn có chắc muốn xóa bài học này?</p>
+        <div className="flex space-x-2 mt-2">
+          <button
+            onClick={async () => {
+              try {
+                await axios.delete(`${API_URL}/${id}`, {
+                  headers: { Authorization: `Bearer ${token}` },
+                });
+                win.success("Xóa bài học thành công!");
+                fetchLessons();
+              } catch (err) {
+                win.error(
+                  err.response?.data?.message || "Xóa bài học thất bại"
+                );
+              }
+            }}
+            className="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600"
+          >
+            Xóa
+          </button>
+          <button
+            onClick={() => win.dismiss()}
+            className="bg-gray-500 text-white px-3 py-1 rounded hover:bg-gray-600"
+          >
+            Hủy
+          </button>
+        </div>
+      </div>,
+      { autoClose: true, closeOnClick: false }
+    );
   };
 
   const openCreateModal = () => {
     resetForm();
     setIsModalOpen(true);
-    setSearchQuery(""); // Reset tìm kiếm
-    setFilteredCourses(courses); // Hiển thị tất cả khóa học
+    setSearchQuery("");
+    setFilteredCourses(courses);
   };
 
   const closeModal = () => {
@@ -186,31 +205,31 @@ const LessonManager = () => {
       orderInCourse: 0,
     });
     setEditingId(null);
-    setSearchQuery(""); // Reset tìm kiếm
-    setFilteredCourses(courses); // Hiển thị tất cả khóa học
+    setSearchQuery("");
+    setFilteredCourses(courses);
   };
 
   return (
-    <div className="container mx-auto p-20">
-      <h1 className="text-2xl font-bold mb-4">Quản lý Bài học</h1>
+    <div className="container mx-auto p-6">
+      <h1 className="text-3xl font-bold text-gray-800 mb-6">Quản lý Bài học</h1>
 
       <button
         onClick={openCreateModal}
-        className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 mb-4"
+        className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition mb-6"
       >
         Thêm Bài học Mới
       </button>
 
       {/* Modal */}
       {isModalOpen && (
-        <div className="fixed inset-0 bg-white flex items-center justify-center z-50 p-4">
-          <div className="bg-white p-6 rounded-lg shadow-lg w-full max-w-md max-h-[80vh] overflow-y-auto">
-            <h2 className="text-xl font-bold mb-4">
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+          <div className="bg-white p-6 rounded-lg shadow-xl w-full max-w-lg max-h-[80vh] overflow-y-auto">
+            <h2 className="text-2xl font-bold text-gray-800 mb-4">
               {editingId ? "Chỉnh sửa Bài học" : "Thêm Bài học Mới"}
             </h2>
             <form onSubmit={handleSubmit} className="space-y-4">
               <div>
-                <label className="block text-sm font-medium">
+                <label className="block text-sm font-medium text-gray-700">
                   Tìm kiếm Khóa học
                 </label>
                 <input
@@ -218,17 +237,19 @@ const LessonManager = () => {
                   value={searchQuery}
                   onChange={handleSearchChange}
                   placeholder="Nhập để tìm kiếm khóa học..."
-                  className="mt-1 block w-full border rounded p-2"
+                  className="mt-1 block w-full border border-gray-300 rounded-lg p-2 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium">Khóa học *</label>
+                <label className="block text-sm font-medium text-gray-700">
+                  Khóa học *
+                </label>
                 <select
                   name="courseId"
                   value={formData.courseId}
                   onChange={handleInputChange}
                   required
-                  className="mt-1 block w-full border rounded p-2"
+                  className="mt-1 block w-full border border-gray-300 rounded-lg p-2 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                 >
                   <option value="">Chọn khóa học</option>
                   {filteredCourses.map((course) => (
@@ -249,27 +270,31 @@ const LessonManager = () => {
                 )}
               </div>
               <div>
-                <label className="block text-sm font-medium">Tiêu đề *</label>
+                <label className="block text-sm font-medium text-gray-700">
+                  Tiêu đề *
+                </label>
                 <input
                   type="text"
                   name="title"
                   value={formData.title}
                   onChange={handleInputChange}
                   required
-                  className="mt-1 block w-full border rounded p-2"
+                  className="mt-1 block w-full border border-gray-300 rounded-lg p-2 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium">Mô tả</label>
+                <label className="block text-sm font-medium text-gray-700">
+                  Mô tả
+                </label>
                 <textarea
                   name="description"
                   value={formData.description}
                   onChange={handleInputChange}
-                  className="mt-1 block w-full border rounded p-2"
+                  className="mt-1 block w-full border border-gray-300 rounded-lg p-2 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium">
+                <label className="block text-sm font-medium text-gray-700">
                   URL Hình ảnh
                 </label>
                 <input
@@ -277,11 +302,11 @@ const LessonManager = () => {
                   name="imageUrl"
                   value={formData.imageUrl}
                   onChange={handleInputChange}
-                  className="mt-1 block w-full border rounded p-2"
+                  className="mt-1 block w-full border border-gray-300 rounded-lg p-2 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                 />
               </div>
               <div>
-                <label className="block text-sm font-medium">
+                <label className="block text-sm font-medium text-gray-700">
                   Thứ tự trong Khóa học *
                 </label>
                 <input
@@ -291,20 +316,20 @@ const LessonManager = () => {
                   onChange={handleInputChange}
                   required
                   min="0"
-                  className="mt-1 block w-full border rounded p-2"
+                  className="mt-1 block w-full border border-gray-300 rounded-lg p-2 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                 />
               </div>
               <div className="flex space-x-2">
                 <button
                   type="submit"
-                  className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
+                  className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition"
                 >
                   {editingId ? "Cập nhật Bài học" : "Thêm Bài học"}
                 </button>
                 <button
                   type="button"
                   onClick={closeModal}
-                  className="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600"
+                  className="bg-gray-500 text-white px-4 py-2 rounded-lg hover:bg-gray-600 transition"
                 >
                   Hủy
                 </button>
@@ -314,40 +339,64 @@ const LessonManager = () => {
         </div>
       )}
 
-      <h2 className="text-xl font-bold mb-4">Danh sách Bài học</h2>
-      <div className="grid gap-4">
-        {lessons.map((lesson) => (
-          <div
-            key={lesson.lessonId}
-            className="border p-4 rounded flex justify-between items-center"
-          >
-            <div>
-              <h3 className="font-bold">{lesson.title}</h3>
-              <p>Mô tả: {lesson.description || "-"}</p>
-              <p>Thứ tự trong Khóa học: {lesson.orderInCourse}</p>
-              <p>
-                Khóa học:{" "}
-                {courses.find((c) => c.courseId === lesson.courseId)?.title ||
-                  lesson.courseId}
-              </p>
+      <h2 className="text-2xl font-bold text-gray-800 mb-4">
+        Danh sách Bài học
+      </h2>
+      {lessons.length === 0 ? (
+        <p className="text-gray-600">Chưa có bài học nào.</p>
+      ) : (
+        <div className="grid gap-4">
+          {lessons.map((lesson) => (
+            <div
+              key={lesson.lessonId}
+              className="border border-gray-200 p-4 rounded-lg shadow-sm flex justify-between items-center bg-white hover:shadow-md transition"
+            >
+              <div>
+                <h3 className="font-bold text-lg text-gray-800">
+                  {lesson.title}
+                </h3>
+                <p className="text-gray-600">
+                  Mô tả: {lesson.description || "-"}
+                </p>
+                <p className="text-gray-600">
+                  Thứ tự trong Khóa học: {lesson.orderInCourse}
+                </p>
+                <p className="text-gray-600">
+                  Khóa học:{" "}
+                  {courses.find((c) => c.courseId === lesson.courseId)?.title ||
+                    lesson.courseId}
+                </p>
+              </div>
+              <div className="space-x-2">
+                <button
+                  onClick={() => handleEdit(lesson.lessonId)}
+                  className="bg-yellow-500 text-white px-3 py-1 rounded-lg hover:bg-yellow-600 transition"
+                >
+                  Sửa
+                </button>
+                <button
+                  onClick={() => handleDelete(lesson.lessonId)}
+                  className="bg-red-500 text-white px-3 py-1 rounded-lg hover:bg-red-600 transition"
+                >
+                  Xóa
+                </button>
+              </div>
             </div>
-            <div className="space-x-2">
-              <button
-                onClick={() => handleEdit(lesson.lessonId)}
-                className="bg-yellow-500 text-white px-3 py-1 rounded hover:bg-yellow-600"
-              >
-                Sửa
-              </button>
-              <button
-                onClick={() => handleDelete(lesson.lessonId)}
-                className="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600"
-              >
-                Xóa
-              </button>
-            </div>
-          </div>
-        ))}
-      </div>
+          ))}
+        </div>
+      )}
+
+      <winContainer
+        position="top-right"
+        autoClose={3000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+      />
     </div>
   );
 };

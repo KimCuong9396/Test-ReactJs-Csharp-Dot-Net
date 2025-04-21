@@ -1,4 +1,6 @@
 import React, { useState, useEffect } from "react";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import {
   searchWords,
   getSearchHistory,
@@ -20,9 +22,10 @@ const DictionarySearch = () => {
         setHistory(historyResponse.data.$values);
         setError("");
       } catch (err) {
-        setError(
-          err.response?.data?.message || "Failed to load search history"
-        );
+        const errorMessage =
+          err.response?.data?.message || "Failed to load search history";
+        setError(errorMessage);
+        toast.error(errorMessage);
       }
     };
 
@@ -38,8 +41,13 @@ const DictionarySearch = () => {
       const historyResponse = await getSearchHistory();
       setHistory(historyResponse.data.$values);
       setError("");
+      toast.success(
+        `Found ${response.data.$values.length} results for "${keyword}"`
+      );
     } catch (err) {
-      setError(err.response?.data?.message || "Search failed");
+      const errorMessage = err.response?.data?.message || "Search failed";
+      setError(errorMessage);
+      toast.error(errorMessage);
     }
   };
 
@@ -51,8 +59,11 @@ const DictionarySearch = () => {
       const historyResponse = await getSearchHistory();
       setHistory(historyResponse.data.$values);
       setError("");
+      toast.info(`Re-searched: "${word}"`);
     } catch (err) {
-      setError(err.response?.data?.message || "Search failed");
+      const errorMessage = err.response?.data?.message || "Search failed";
+      setError(errorMessage);
+      toast.error(errorMessage);
     }
   };
 
@@ -60,36 +71,79 @@ const DictionarySearch = () => {
     try {
       await deleteSearchHistory(searchId);
       setHistory(history.filter((search) => search.searchId !== searchId));
+      toast.success("Search item deleted successfully");
     } catch (err) {
-      setError(
-        err.response?.data?.message || "Failed to delete search history"
-      );
+      const errorMessage =
+        err.response?.data?.message || "Failed to delete search history";
+      setError(errorMessage);
+      toast.error(errorMessage);
     }
   };
 
   const deleteAllSearches = async () => {
-    if (window.confirm("Are you sure you want to delete all search history?")) {
-      try {
-        await deleteAllSearchHistory();
-        setHistory([]);
-        setError("");
-      } catch (err) {
-        setError(
-          err.response?.data?.message || "Failed to delete all search history"
-        );
-      }
-    }
+    // Using Toastify's confirmation instead of window.confirm
+    toast.info(
+      <div>
+        <p>Are you sure you want to delete all search history?</p>
+        <div className="mt-2 flex justify-end gap-2">
+          <button
+            className="px-2 py-1 bg-gray-200 rounded text-sm"
+            onClick={() => toast.dismiss()}
+          >
+            Cancel
+          </button>
+          <button
+            className="px-2 py-1 bg-red-500 text-white rounded text-sm"
+            onClick={async () => {
+              toast.dismiss();
+              try {
+                await deleteAllSearchHistory();
+                setHistory([]);
+                setError("");
+                toast.success("All search history deleted");
+              } catch (err) {
+                const errorMessage =
+                  err.response?.data?.message ||
+                  "Failed to delete all search history";
+                setError(errorMessage);
+                toast.error(errorMessage);
+              }
+            }}
+          >
+            Delete All
+          </button>
+        </div>
+      </div>,
+      { autoClose: false, closeOnClick: false }
+    );
   };
 
   const playAudio = (audioUrl) => {
     if (audioUrl) {
       const audio = new Audio(audioUrl);
-      audio.play().catch((err) => console.error("Audio playback failed:", err));
+      audio.play().catch((err) => {
+        console.error("Audio playback failed:", err);
+        toast.error("Failed to play audio");
+      });
+    } else {
+      toast.info("No audio available for this word");
     }
   };
 
   return (
     <div className="min-h-screen bg-gray-100 flex flex-col items-center justify-center py-10">
+      <ToastContainer
+        position="top-right"
+        autoClose={3000}
+        hideProgressBar={false}
+        newestOnTop
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+      />
+
       <div className="w-full max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
         {error && (
           <div className="bg-red-50 text-red-600 p-4 rounded-lg mb-6 shadow-sm text-center">
@@ -132,7 +186,12 @@ const DictionarySearch = () => {
                       src={word.imageUrl}
                       alt={word.wordText}
                       className="w-32 h-32 object-cover rounded-lg"
-                      onError={(e) => (e.target.style.display = "none")}
+                      onError={(e) => {
+                        e.target.style.display = "none";
+                        toast.info(
+                          `Image for ${word.wordText} could not be loaded`
+                        );
+                      }}
                     />
                   )}
                   <div className="flex-1">
@@ -247,7 +306,7 @@ const DictionarySearch = () => {
                       className="w-5 h-5"
                       fill="none"
                       stroke="currentColor"
-                      viewBox="0 24 24"
+                      viewBox="0 0 24 24"
                       xmlns="http://www.w3.org/2000/svg"
                     >
                       <path

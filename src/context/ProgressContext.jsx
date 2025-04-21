@@ -16,7 +16,7 @@ export const ProgressProvider = ({ children }) => {
       }
       try {
         const progressResponse = await getAllLearnedProgress();
-        console.log("Fetched learnedWords:", progressResponse.data.$values);
+        //console.log("Fetched learnedWords:", progressResponse.data.$values);
         setLearnedWords(progressResponse.data.$values || []);
       } catch (err) {
         console.error("Không thể tải từ vựng đã học:", err);
@@ -30,7 +30,7 @@ export const ProgressProvider = ({ children }) => {
 
   const updateWordProgress = (wordId, updatedProgress) => {
     if (!wordId) {
-      console.log("Updating entire learnedWords:", updatedProgress);
+      //console.log("Updating entire learnedWords:", updatedProgress);
       setLearnedWords(updatedProgress || []);
       return;
     }
@@ -40,11 +40,11 @@ export const ProgressProvider = ({ children }) => {
         const updated = prev.map((word) =>
           word.wordId === wordId ? { ...word, ...updatedProgress } : word
         );
-        console.log("Updated existing word:", updated);
+        //console.log("Updated existing word:", updated);
         return updated;
       }
       const newWord = { ...updatedProgress };
-      console.log("Added new word:", newWord);
+      //console.log("Added new word:", newWord);
       return [...prev, newWord];
     });
   };

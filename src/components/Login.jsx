@@ -63,6 +63,7 @@ const Login = () => {
               className="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-700 transition-all duration-300 text-sm disabled:opacity-50"
               required
               disabled={loading}
+              autocomplete="off"
             />
           </div>
           <button

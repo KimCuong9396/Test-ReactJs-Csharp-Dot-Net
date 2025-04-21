@@ -9,6 +9,8 @@ import CreateCourseModal from "./CreateCourseModal";
 import EditCourseModal from "./EditCourseModal";
 import DeleteConfirmModal from "./DeleteConfirmModal";
 import { FaEdit, FaTrash } from "react-icons/fa";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const ManageCourse = () => {
   const [courses, setCourses] = useState([]);
@@ -43,9 +45,10 @@ const ManageCourse = () => {
     try {
       const response = await CreateCourse(course);
       await fetchCourses(); // Đồng bộ lại danh sách
-      alert("Tạo khóa học thành công!");
+      toast.success("Tạo khóa học thành công!");
     } catch (err) {
       console.error("Error creating course:", err);
+      toast.error("Tạo khóa học thất bại!");
       throw err;
     }
   };
@@ -60,9 +63,10 @@ const ManageCourse = () => {
         level: course.level,
       });
       await fetchCourses(); // Đồng bộ lại danh sách
-      alert("Cập nhật khóa học thành công!");
+      toast.success("Cập nhật khóa học thành công!");
     } catch (err) {
       console.error("Error updating course:", err);
+      toast.error("Cập nhật khóa học thất bại!");
       throw err;
     }
   };
@@ -72,12 +76,12 @@ const ManageCourse = () => {
     try {
       await DeleteCourse(courseToDelete.courseId);
       await fetchCourses(); // Đồng bộ lại danh sách
-      alert("Xóa khóa học thành công!");
+      toast.success("Xóa khóa học thành công!");
       setShowDeleteModal(false);
       setCourseToDelete(null);
     } catch (err) {
       console.error("Error deleting course:", err);
-      alert("Xóa khóa học thất bại!");
+      toast.error("Xóa khóa học thất bại!");
       setShowDeleteModal(false);
       setCourseToDelete(null);
     }
@@ -126,9 +130,9 @@ const ManageCourse = () => {
                           setShowEditModal(true);
                         }}
                         className="text-blue-600 hover:text-blue-800"
-                        title="Sửa" // Tooltip khi hover
+                        title="Sửa"
                       >
-                        <FaEdit size={20} /> {/* Icon chỉnh sửa */}
+                        <FaEdit size={20} />
                       </button>
                       <button
                         onClick={() => {
@@ -136,9 +140,9 @@ const ManageCourse = () => {
                           setShowDeleteModal(true);
                         }}
                         className="text-amber-500 hover:text-red-800"
-                        title="Xóa" // Tooltip khi hover
+                        title="Xóa"
                       >
-                        <FaTrash size={20} /> {/* Icon xóa */}
+                        <FaTrash size={20} />
                       </button>
                     </div>
                   </td>
@@ -180,6 +184,19 @@ const ManageCourse = () => {
           onDelete={handleDeleteCourse}
         />
       )}
+
+      {/* Toast container để hiển thị thông báo */}
+      <ToastContainer
+        position="top-right"
+        autoClose={3000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+      />
     </div>
   );
 };
