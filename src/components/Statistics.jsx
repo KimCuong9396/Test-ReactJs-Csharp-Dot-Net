@@ -88,7 +88,7 @@ const Statistics = () => {
     },
     plugins: {
       legend: {
-        display: false, // Ẩn legend vì chỉ có một dataset
+        display: false,
       },
       title: {
         display: true,
@@ -143,7 +143,7 @@ const Statistics = () => {
         },
       },
       y: {
-        display: false, // Ẩn trục tung
+        display: false,
       },
     },
     elements: {
@@ -159,7 +159,6 @@ const Statistics = () => {
     },
   };
 
-  // Thêm gradient background colors khi chart render
   const plugins = [
     {
       id: "customGradient",
@@ -191,11 +190,11 @@ const Statistics = () => {
   ];
 
   return (
-    <div className="min-h-screen w-full bg-gradient-to-br from-indigo-400 via-purple-400 to-pink-400 bg-opacity-80 flex justify-center items-start pt-20 px-4">
+    <div className="min-h-screen w-full bg-gray-100 flex justify-center items-start pt-20 px-4">
       <div className="w-full max-w-4xl">
         <Link
           to="/revise"
-          className="inline-flex items-center gap-2 px-4 py-2 bg-amber-300 text-white rounded-full shadow-md hover:shadow-lg hover:scale-105 transition duration-300 font-semibold mb-2"
+          className="inline-flex items-center gap-2 px-4 py-2 bg-blue-700 text-white rounded-full shadow-md hover:shadow-lg hover:scale-105 transition duration-300 font-semibold mb-6"
         >
           Quay lại ôn tập
         </Link>
@@ -206,7 +205,7 @@ const Statistics = () => {
           )}
 
           {error && (
-            <div className="bg-red-100 text-red-700 p-4 rounded mb-4 text-center">
+            <div className="bg-red-50 text-red-600 p-4 rounded-lg mb-6 text-center shadow-sm">
               {error}
             </div>
           )}
@@ -218,7 +217,7 @@ const Statistics = () => {
           )}
 
           {!loading && !error && learnedWords.length > 0 && (
-            <div className="bg-white p-4 sm:p-6 rounded-xl shadow-inner">
+            <div className="bg-white p-4 sm:p-6 rounded-xl shadow-sm">
               <div style={{ height: "300px" }}>
                 <Bar
                   data={chartData}

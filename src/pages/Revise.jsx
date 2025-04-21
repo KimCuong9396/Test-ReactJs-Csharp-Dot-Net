@@ -233,150 +233,135 @@ const Revise = () => {
   }
 
   return (
-    <div className="bg-gradient-to-br from-indigo-500 via-purple-500 to-pink-500 min-h-screen flex flex-col items-center justify-center text-center relative -mx-6 -mt-6">
-      <div className="mt-8 max-w-3xl mx-auto mt-25">
-        <div className="flex gap-4 mb-4">
+    <div className="min-h-screen bg-gray-100 flex flex-col items-center justify-center py-20 px-4">
+      <div className="w-full max-w-3xl mx-auto">
+        <div className="flex flex-col sm:flex-row gap-4 mb-6">
           <button
             onClick={() => startGame()}
-            className="bg-amber-300 text-white px-4 py-2 rounded hover:bg-indigo-700"
+            className="bg-blue-700 text-white px-6 py-3 rounded-lg hover:bg-blue-800 focus:ring-2 focus:ring-blue-700 focus:ring-offset-2 transition duration-200 font-medium"
           >
             Ôn tập tất cả từ vựng đã học
           </button>
-          <div className="flex gap-2">
-            <input
-              type="text"
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              placeholder="Tìm từ vựng..."
-              className="p-2 border rounded"
-            />
-            <button
-              onClick={handleSearch}
-              className="bg-amber-300 text-white px-4 py-2 rounded hover:bg-indigo-700"
-            >
-              Tìm kiếm
-            </button>
-          </div>
         </div>
-
-        {showGame ? (
-          <div className="bg-white p-6 rounded-lg shadow-md">
-            <h4 className="text-xl font-semibold mb-4">
-              Từ vựng: {gameWords[currentWordIndex]?.word?.wordText || "N/A"}
-            </h4>
-            <input
-              type="text"
-              value={userAnswer}
-              onChange={(e) => {
-                console.log("Input changed, new value:", e.target.value);
-                setUserAnswer(e.target.value);
-              }}
-              placeholder="Nhập nghĩa của từ..."
-              className="w-full p-2 border rounded mb-4"
-              disabled={showResult}
-            />
-            {!showResult ? (
-              <button
-                onClick={() => {
-                  console.log("Xem kết quả button clicked");
-                  handleCheckResult();
-                }}
-                className="bg-amber-300 text-white px-4 py-2 rounded hover:bg-indigo-700"
-              >
-                Xem kết quả
-              </button>
-            ) : (
-              <div
-                className={`p-4 rounded-lg shadow-md ${
-                  isCorrect ? "bg-green-100" : "bg-red-100"
-                }`}
-              >
-                <p className="text-lg font-semibold">
-                  {isCorrect ? "Đúng!" : "Sai!"}
-                </p>
-                <p className="text-gray-800">
-                  Từ: {gameWords[currentWordIndex]?.word?.wordText || "N/A"}
-                </p>
-                <p className="text-gray-800">
-                  Nghĩa đúng: {gameWords[currentWordIndex]?.word?.mean || "N/A"}
-                </p>
-                <button
-                  onClick={handleContinue}
-                  className="bg-amber-300 text-white px-4 py-2 rounded hover:bg-indigo-700 mt-4"
-                >
-                  Tiếp tục
-                </button>
-              </div>
-            )}
-            <p className="mt-4">
-              Điểm: {score}/{gameWords.length}
-            </p>
-          </div>
-        ) : (
-          <>
-            {error && (
-              <div className="bg-red-100 text-red-700 p-4 rounded mb-4">
-                {error}
-              </div>
-            )}
-            {loading && (
-              <div className="text-gray-600 text-center">Đang tải...</div>
-            )}
-            {!loading && filteredWords.length === 0 && !error && (
-              <div className="text-gray-600 text-center">
-                {searchQuery
-                  ? "Không tìm thấy từ vựng phù hợp."
-                  : "Chưa có từ vựng nào được đánh dấu là đã học."}
-              </div>
-            )}
-            {!loading && filteredWords.length > 0 && (
-              <div className="space-y-4">
-                {filteredWords.map((word) => {
-                  const nextReview = word.nextReview
-                    ? new Date(word.nextReview)
-                    : null;
-                  const isDue = nextReview && nextReview <= new Date();
-                  return (
-                    <div
-                      key={word.wordId}
-                      className={`p-4 rounded-lg shadow-md ${
-                        isDue ? "bg-yellow-100" : "bg-white"
-                      }`}
-                    >
-                      <h4 className="text-xl font-semibold text-gray-800">
-                        {word.word?.wordText || "N/A"}
-                      </h4>
-                      <p className="text-gray-600">
-                        Cấp độ ghi nhớ: {word.memoryLevel || 1}
-                      </p>
-                      <p className="text-gray-600">
-                        Số lần ôn tập: {word.reviewCount || 0}
-                      </p>
-                      <p className="text-gray-600">
-                        Lần ôn tập tiếp theo:{" "}
-                        {nextReview
-                          ? nextReview.toLocaleString()
-                          : "Chưa lên lịch"}
-                      </p>
-                      {isDue && (
-                        <p className="text-red-600 font-semibold">
-                          Đã đến lúc ôn tập!
-                        </p>
-                      )}
-                      <button
-                        onClick={() => startGame(word.wordId)}
-                        className="text-primary hover:text-indigo-700 underline mt-2 inline-block"
-                      >
-                        Ôn tập ngay
-                      </button>
-                    </div>
-                  );
-                })}
-              </div>
-            )}
-          </>
-        )}
       </div>
+
+      {showGame ? (
+        <div className="bg-white p-6 rounded-xl shadow-sm">
+          <h4 className="text-xl font-semibold text-gray-800 mb-4">
+            Từ vựng: {gameWords[currentWordIndex]?.word?.wordText || "N/A"}
+          </h4>
+          <input
+            type="text"
+            value={userAnswer}
+            onChange={(e) => {
+              console.log("Input changed, new value:", e.target.value);
+              setUserAnswer(e.target.value);
+            }}
+            placeholder="Nhập nghĩa của từ..."
+            className="w-full p-3 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-700 text-gray-900 placeholder-gray-400 transition duration-200 mb-4"
+            disabled={showResult}
+          />
+          {!showResult ? (
+            <button
+              onClick={() => {
+                console.log("Xem kết quả button clicked");
+                handleCheckResult();
+              }}
+              className="bg-blue-700 text-white px-6 py-3 rounded-lg hover:bg-blue-800 focus:ring-2 focus:ring-blue-700 focus:ring-offset-2 transition duration-200 font-medium"
+            >
+              Xem kết quả
+            </button>
+          ) : (
+            <div
+              className={`p-6 rounded-lg shadow-sm ${
+                isCorrect ? "bg-green-50" : "bg-red-50"
+              }`}
+            >
+              <p className="text-lg font-semibold text-gray-800">
+                {isCorrect ? "Đúng!" : "Sai!"}
+              </p>
+              <p className="text-gray-600">
+                Từ: {gameWords[currentWordIndex]?.word?.wordText || "N/A"}
+              </p>
+              <p className="text-gray-600">
+                Nghĩa đúng: {gameWords[currentWordIndex]?.word?.mean || "N/A"}
+              </p>
+              <button
+                onClick={handleContinue}
+                className="bg-blue-700 text-white px-6 py-3 rounded-lg hover:bg-blue-800 focus:ring-2 focus:ring-blue-700 focus:ring-offset-2 transition duration-200 font-medium mt-4"
+              >
+                Tiếp tục
+              </button>
+            </div>
+          )}
+          <p className="mt-4 text-gray-600">
+            Điểm: {score}/{gameWords.length}
+          </p>
+        </div>
+      ) : (
+        <>
+          {error && (
+            <div className="bg-red-50 text-red-600 p-4 rounded-lg mb-6 text-center shadow-sm">
+              {error}
+            </div>
+          )}
+          {loading && (
+            <div className="text-gray-600 text-center py-6">Đang tải...</div>
+          )}
+          {!loading && filteredWords.length === 0 && !error && (
+            <div className="text-gray-600 text-center py-6">
+              {searchQuery
+                ? "Không tìm thấy từ vựng phù hợp."
+                : "Chưa có từ vựng nào được đánh dấu là đã học."}
+            </div>
+          )}
+          {!loading && filteredWords.length > 0 && (
+            <div className="space-y-4">
+              {filteredWords.map((word) => {
+                const nextReview = word.nextReview
+                  ? new Date(word.nextReview)
+                  : null;
+                const isDue = nextReview && nextReview <= new Date();
+                return (
+                  <div
+                    key={word.wordId}
+                    className={`p-6 rounded-xl shadow-sm transition duration-300 ${
+                      isDue ? "bg-yellow-50" : "bg-white"
+                    } hover:shadow-md`}
+                  >
+                    <h4 className="text-xl font-semibold text-gray-800 mb-2">
+                      {word.word?.wordText || "N/A"}
+                    </h4>
+                    <p className="text-gray-600">
+                      Cấp độ ghi nhớ: {word.memoryLevel || 1}
+                    </p>
+                    <p className="text-gray-600">
+                      Số lần ôn tập: {word.reviewCount || 0}
+                    </p>
+                    <p className="text-gray-600">
+                      Lần ôn tập tiếp theo:{" "}
+                      {nextReview
+                        ? nextReview.toLocaleString()
+                        : "Chưa lên lịch"}
+                    </p>
+                    {isDue && (
+                      <p className="text-red-600 font-semibold mt-2">
+                        Đã đến lúc ôn tập!
+                      </p>
+                    )}
+                    <button
+                      onClick={() => startGame(word.wordId)}
+                      className="text-blue-700 hover:text-blue-800 underline mt-3 inline-block transition duration-200"
+                    >
+                      Ôn tập ngay
+                    </button>
+                  </div>
+                );
+              })}
+            </div>
+          )}
+        </>
+      )}
     </div>
   );
 };

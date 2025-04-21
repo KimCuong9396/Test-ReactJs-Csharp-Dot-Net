@@ -113,16 +113,14 @@ const WordList = () => {
       };
 
       const response = await updateUserProgress(updatedProgress);
-      // Update local progress
       setProgress((prev) => ({
         ...prev,
         [wordId]: response.data,
       }));
-      // Update ProgressContext for Revise and NotificationBell
       const wordData = words.find((w) => w.wordId === wordId);
       updateWordProgress(wordId, {
         ...response.data,
-        word: wordData, // Include word details for Revise
+        word: wordData,
       });
       toast.success("Đã đánh dấu từ thuộc!");
       handleNext();
@@ -155,7 +153,6 @@ const WordList = () => {
     return now.toISOString();
   };
 
-  // Phím tắt
   useEffect(() => {
     const handleKeyDown = (e) => {
       if (e.key === " " && !isCompleted) {
@@ -170,84 +167,59 @@ const WordList = () => {
   }, [isCompleted]);
 
   if (!token) {
-    return null; // Render nothing while redirecting
+    return null;
   }
 
   return (
-    <div className="min-h-screen w-full bg-gradient-to-br from-indigo-400 via-purple-400 to-pink-400 bg-opacity-80 flex flex-col items-center justify-center pt-16 p-0 m-0 box-border">
-      <div className="w-200 h-117 max-w-lg mx-4 bg-white bg-opacity-90 shadow-xl p-6 relative">
+    <div className="min-h-screen bg-gray-100 flex flex-col items-center justify-center py-12 px-4">
+      <div className="w-full max-w-lg mx-auto bg-white rounded-xl shadow-sm p-6">
         <div className="flex flex-col items-center">
-          {/* Thanh tiến độ */}
-          <div className="w-full bg-gray-200 h-8 rounded-xl border border-gray-300 overflow-hidden mb-1 z-10">
+          <div className="w-full bg-gray-200 h-2 rounded-full mb-6 overflow-hidden">
             <div
-              className="bg-gradient-to-r from-yellow-400 to-yellow-600 h-full flex items-center justify-center text-indigo-900 text-sm font-semibold shadow-sm rounded-xl transition-all duration-300"
+              className="bg-blue-700 h-full rounded-full transition-all duration-300"
               style={{
                 width:
                   words.length > 0
-                    ? `${(currentIndex / words.length) * 100}%`
+                    ? `${((currentIndex + 1) / words.length) * 100}%`
                     : "0%",
               }}
-            >
-              {currentIndex > 0 ? `${currentIndex}/${words.length}` : ""}
-            </div>
+            />
           </div>
-          {/* Thông báo hoàn thành */}
           {isCompleted && (
-            <div className="flex items-center justify-center mt-4 z-20">
-              <div className="bg-[#ffcb09] text-indigo-900 text-lg font-bold px-6 py-3 rounded-xl shadow-lg animate-pulse">
+            <div className="flex items-center justify-center mb-6">
+              <div className="bg-blue-50 text-blue-700 text-lg font-semibold px-6 py-3 rounded-lg shadow-sm">
                 Chúc mừng! Bạn đã hoàn thành bộ từ vựng!
-              </div>
-              <div className="absolute inset-0 overflow-hidden pointer-events-none z-0">
-                {[...Array(20)].map((_, i) => (
-                  <div
-                    key={i}
-                    className={`absolute w-2 h-2 rounded-full animate-[fall_2s_ease-in-out_infinite] ${
-                      i % 3 === 0
-                        ? "bg-red-500"
-                        : i % 3 === 1
-                        ? "bg-blue-500"
-                        : "bg-green-500"
-                    }`}
-                    style={{
-                      left: `${Math.random() * 100}%`,
-                      animationDelay: `${Math.random() * 2}s`,
-                      transform: `rotate(${Math.random() * 360}deg)`,
-                    }}
-                  />
-                ))}
               </div>
             </div>
           )}
           {error && (
-            <div className="bg-red-100 border border-red-300 text-red-700 p-3 rounded-lg mb-4 text-sm text-center">
+            <div className="bg-red-50 text-red-600 p-4 rounded-lg mb-6 text-center shadow-sm w-full">
               {error}
             </div>
           )}
           {loading && (
-            <div className="text-gray-600 text-center italic text-sm">
+            <div className="text-gray-600 text-center italic">
               Đang tải thẻ...
             </div>
           )}
           {!loading && words.length === 0 && !error && (
-            <div className="text-gray-600 text-center italic text-sm">
+            <div className="text-gray-600 text-center italic">
               Không có thẻ từ vựng cho bài học này.
             </div>
           )}
           {!loading && words.length > 0 && !isCompleted && (
             <div
-              className={`transition-all duration-300 flashcard-container ${
+              className={`w-full transition-all duration-300 flashcard-container ${
                 animate ? "animate-slideIn" : ""
               }`}
             >
-              <div className="p-14">
-                <Flashcard
-                  word={words[currentIndex]}
-                  onNext={handleNext}
-                  onSpeak={handleSpeak}
-                  onAddFavorite={handleAddFavorite}
-                  onLearned={handleLearned}
-                />
-              </div>
+              <Flashcard
+                word={words[currentIndex]}
+                onNext={handleNext}
+                onSpeak={handleSpeak}
+                onAddFavorite={handleAddFavorite}
+                onLearned={handleLearned}
+              />
             </div>
           )}
         </div>
@@ -261,16 +233,6 @@ const WordList = () => {
           to {
             transform: translateX(0);
             opacity: 1;
-          }
-        }
-        @keyframes fall {
-          0% {
-            transform: translateY(-100%) rotate(0deg);
-            opacity: 1;
-          }
-          100% {
-            transform: translateY(100vh) rotate(720deg);
-            opacity: 0;
           }
         }
         .animate-slideIn {

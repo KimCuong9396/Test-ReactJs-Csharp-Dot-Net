@@ -195,7 +195,7 @@ const VocabularyManager = () => {
   };
 
   return (
-    <div className="container mx-auto p-4">
+    <div className="container mx-auto p-20">
       <h1 className="text-2xl font-bold mb-4">Quản lý Từ vựng</h1>
 
       {error && <div className="text-red-500 mb-4">{error}</div>}

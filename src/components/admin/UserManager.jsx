@@ -202,7 +202,7 @@ const UserManager = () => {
   );
 
   return (
-    <div className="container mx-auto p-4">
+    <div className="container mx-auto p-20">
       <h1 className="text-2xl font-bold mb-4">Quản lý Tài khoản Người dùng</h1>
 
       {/* Kiểm tra quyền Premium */}
@@ -227,7 +227,7 @@ const UserManager = () => {
               />
               <button
                 onClick={handleAddUser}
-                className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600"
+                className="bg-blue-700 text-white px-4 py-2 rounded hover:bg-blue-800"
               >
                 Thêm Người dùng
               </button>

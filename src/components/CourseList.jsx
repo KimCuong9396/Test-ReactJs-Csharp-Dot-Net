@@ -19,30 +19,30 @@ const CourseList = () => {
   }, []);
 
   return (
-    <div className="min-h-screen w-full bg-gradient-to-br from-indigo-400 via-purple-400 to-pink-400 bg-opacity-80 flex justify-center pt-16 p-0 m-0 box-border">
-      <div className="w-full max-w-4xl mx-4 rounded-xl p-6">
+    <div className="min-h-screen bg-gray-100 flex flex-col items-center justify-center py-20 px-4">
+      <div className="w-full max-w-4xl mx-auto">
         <div className="flex flex-col items-center">
-          <h2 className="w-150 h-10 px-4 flex items-center justify-center text-indigo-900 text-center text-xl font-bold leading-none rounded-[10px] bg-[#ffcb09] shadow-[4px_6px_10px_rgba(255,150,0,0.25)] mb-6">
+          <h2 className="text-2xl font-bold text-gray-800 bg-white px-6 py-3 rounded-lg shadow-sm mb-6">
             Danh sách khóa học
           </h2>
           {error && (
-            <div className="bg-red-100 text-red-700 p-3 rounded-lg mb-4 text-center">
+            <div className="bg-red-50 text-red-600 p-4 rounded-lg mb-6 text-center shadow-sm w-full">
               {error}
             </div>
           )}
-          <div className="flex flex-col gap-3 w-150">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 w-full">
             {courses.map((course) => (
               <div
                 key={course.courseId}
-                className="bg-white bg-opacity-90 p-4 rounded-lg shadow-md hover:shadow-lg hover:bg-yellow-100 transition-all duration-300"
+                className="bg-white p-6 rounded-xl shadow-sm hover:shadow-md transition duration-300 border border-gray-100"
               >
-                <h3 className="text-xl font-semibold text-indigo-800">
+                <h3 className="text-xl font-semibold text-gray-800 mb-2">
                   {course.title}
                 </h3>
-                <p className="text-gray-600 mt-2">{course.description}</p>
+                <p className="text-gray-600 mb-4">{course.description}</p>
                 <Link
                   to={`/courses/${course.courseId}`}
-                  className="mt-4 inline-block bg-yellow-200 text-indigo-900 px-4 py-2 rounded-lg font-semibold hover:bg-yellow-400 hover:scale-105 transition-all duration-300"
+                  className="inline-block bg-blue-700 text-white px-6 py-3 rounded-lg font-medium hover:bg-blue-800 focus:ring-2 focus:ring-blue-700 focus:ring-offset-2 transition duration-200"
                 >
                   View Lessons
                 </Link>
