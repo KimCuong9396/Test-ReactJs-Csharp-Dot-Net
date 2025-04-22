@@ -41,7 +41,7 @@ const Navbar = () => {
   };
 
   const linkStyles = (path) =>
-    `text-base font-semibold px-4 py-2 rounded-lg transition-all duration-300 ${
+    `text-sm md:text-base lg:text-base font-semibold px-2 md:px-3 lg:px-4 py-2 rounded-lg transition-all duration-300 ${
       scrolled
         ? activeLink === path
           ? "text-blue-700 bg-blue-50"
@@ -52,7 +52,7 @@ const Navbar = () => {
     }`;
 
   const mobileLinkStyles = (path) =>
-    `text-base font-semibold px-4 py-3 w-full text-center rounded-lg transition-all duration-300 ${
+    `text-sm md:text-base font-semibold px-4 py-2 md:py-3 w-full text-center rounded-lg transition-all duration-300 ${
       activeLink === path
         ? "text-blue-700 bg-blue-50"
         : "text-gray-600 hover:bg-gray-100 hover:text-blue-700"
@@ -61,15 +61,17 @@ const Navbar = () => {
   return (
     <nav
       className={`fixed w-full top-0 z-50 transition-all duration-300 ${
-        scrolled ? "bg-white shadow-md py-2" : "bg-blue-700 shadow-sm py-3"
+        scrolled
+          ? "bg-white shadow-md py-2"
+          : "bg-blue-700 shadow-sm py-2 md:py-3"
       }`}
     >
-      <div className="container mx-auto px-4">
+      <div className="container mx-auto px-2 sm:px-4 md:px-6 max-w-screen-xl">
         <div className="flex justify-between items-center">
           {/* Logo */}
           <Link
             to="/"
-            className={`text-2xl font-bold ${
+            className={`text-lg sm:text-xl md:text-2xl lg:text-3xl font-bold ${
               scrolled ? "text-blue-700" : "text-white"
             }`}
             onClick={() => handleLinkClick("/")}
@@ -78,7 +80,7 @@ const Navbar = () => {
           </Link>
 
           {/* Desktop Navigation Links */}
-          <div className="hidden md:flex items-center space-x-2">
+          <div className="hidden lg:flex items-center space-x-1 md:space-x-2">
             <Link
               to="/"
               className={linkStyles("/")}
@@ -128,16 +130,16 @@ const Navbar = () => {
                 <NotificationBell scrolled={scrolled} />
                 <div className="relative">
                   <button
-                    className={`flex items-center font-semibold px-4 py-2 rounded-lg transition-all duration-300 ${
+                    className={`flex items-center font-semibold px-2 md:px-3 lg:px-4 py-2 rounded-lg transition-all duration-300 ${
                       scrolled
                         ? "text-gray-600 hover:bg-gray-100"
                         : "text-white hover:bg-blue-800 hover:bg-opacity-70"
                     }`}
                     onClick={() => setIsDropdownOpen(!isDropdownOpen)}
                   >
-                    <span>{username}</span>
+                    <span className="text-sm md:text-base">{username}</span>
                     <svg
-                      className="w-4 h-4 ml-2"
+                      className="w-4 h-4 ml-1 md:ml-2"
                       fill="none"
                       stroke="currentColor"
                       viewBox="0 0 24 24"
@@ -151,17 +153,17 @@ const Navbar = () => {
                     </svg>
                   </button>
                   {isDropdownOpen && (
-                    <div className="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg py-2 z-50 animate-slide-in">
+                    <div className="absolute right-0 mt-2 w-36 md:w-40 lg:w-48 bg-white rounded-lg shadow-lg py-2 z-50 animate-slide-in">
                       <Link
                         to="/profile"
-                        className="block px-4 py-2 text-gray-600 hover:bg-blue-50 hover:text-blue-700"
+                        className="block px-4 py-2 text-sm md:text-base text-gray-600 hover:bg-blue-50 hover:text-blue-700"
                         onClick={() => handleLinkClick("/profile")}
                       >
                         Profile
                       </Link>
                       <button
                         onClick={handleLogout}
-                        className="block w-full text-left px-4 py-2 text-gray-600 hover:bg-blue-50 hover:text-blue-700"
+                        className="block w-full text-left px-4 py-2 text-sm md:text-base text-gray-600 hover:bg-blue-50 hover:text-blue-700"
                       >
                         Logout
                       </button>
@@ -174,7 +176,7 @@ const Navbar = () => {
               <>
                 <Link
                   to="/login"
-                  className={`text-base font-semibold px-4 py-2 rounded-lg transition-all duration-300 ${
+                  className={`text-sm md:text-base font-semibold px-2 md:px-3 lg:px-4 py-2 rounded-lg transition-all duration-300 ${
                     scrolled
                       ? "text-gray-600 hover:bg-gray-100 hover:text-blue-700"
                       : "text-white hover:bg-blue-800 hover:bg-opacity-70"
@@ -185,7 +187,7 @@ const Navbar = () => {
                 </Link>
                 <Link
                   to="/register"
-                  className={`text-base font-semibold px-4 py-2 rounded-lg transition-all duration-300 ${
+                  className={`text-sm md:text-base font-semibold px-2 md:px-3 lg:px-4 py-2 rounded-lg transition-all duration-300 ${
                     scrolled
                       ? "bg-orange-500 text-white hover:bg-orange-600"
                       : "bg-orange-500 text-white hover:bg-orange-600"
@@ -200,14 +202,14 @@ const Navbar = () => {
 
           {/* Mobile Menu Button */}
           <button
-            className={`md:hidden focus:outline-none ${
+            className={`lg:hidden focus:outline-none ${
               scrolled ? "text-gray-600" : "text-white"
             }`}
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
           >
             {isMobileMenuOpen ? (
               <svg
-                className="w-6 h-6"
+                className="w-6 h-6 md:w-7 md:h-7"
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
@@ -221,7 +223,7 @@ const Navbar = () => {
               </svg>
             ) : (
               <svg
-                className="w-6 h-6"
+                className="w-6 h-6 md:w-7 md:h-7"
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
@@ -239,7 +241,7 @@ const Navbar = () => {
 
         {/* Mobile Menu */}
         {isMobileMenuOpen && (
-          <div className="md:hidden mt-4 py-4 flex flex-col space-y-2 bg-white rounded-lg shadow-md animate-slide-in">
+          <div className="lg:hidden mt-2 md:mt-3 py-2 md:py-3 flex flex-col space-y-1 md:space-y-2 bg-white rounded-lg shadow-md animate-slide-in">
             <Link
               to="/"
               className={mobileLinkStyles("/")}
@@ -286,12 +288,12 @@ const Navbar = () => {
                     Admin
                   </Link>
                 )}
-                <div className="px-4 py-3">
+                <div className="px-4 py-2 md:py-3">
                   <NotificationBell scrolled={true} />
                 </div>
                 <div className="relative">
                   <button
-                    className="text-base font-semibold px-4 py-3 w-full text-center text-gray-600 hover:bg-gray-100 hover:text-blue-700 rounded-lg"
+                    className="text-sm md:text-base font-semibold px-4 py-2 md:py-3 w-full text-center text-gray-600 hover:bg-gray-100 hover:text-blue-700 rounded-lg"
                     onClick={() => setIsDropdownOpen(!isDropdownOpen)}
                   >
                     {username}
@@ -313,14 +315,14 @@ const Navbar = () => {
                     <div className="bg-white rounded-lg py-2 mt-1 shadow-md">
                       <Link
                         to="/profile"
-                        className="block px-4 py-2 text-gray-600 hover:bg-blue-50 hover:text-blue-700"
+                        className="block px-4 py-2 text-sm md:text-base text-gray-600 hover:bg-blue-50 hover:text-blue-700"
                         onClick={() => handleLinkClick("/profile")}
                       >
                         Profile
                       </Link>
                       <button
                         onClick={handleLogout}
-                        className="block w-full text-left px-4 py-2 text-gray-600 hover:bg-blue-50 hover:text-blue-700"
+                        className="block w-full text-left px-4 py-2 text-sm md:text-base text-gray-600 hover:bg-blue-50 hover:text-blue-700"
                       >
                         Logout
                       </button>
@@ -340,7 +342,7 @@ const Navbar = () => {
                 </Link>
                 <Link
                   to="/register"
-                  className="text-base font-semibold px-4 py-3 w-full text-center bg-orange-500 text-white hover:bg-orange-600 rounded-lg transition-all duration-300"
+                  className="text-sm md:text-base font-semibold px-4 py-2 md:py-3 w-full text-center bg-orange-500 text-white hover:bg-orange-600 rounded-lg transition-all duration-300"
                   onClick={() => handleLinkClick("/register")}
                 >
                   Register
