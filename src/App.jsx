@@ -23,6 +23,9 @@ import VocabularyManager from "./components/admin/VocabularyManager";
 import LessonManager from "./components/admin/LessonManager";
 import UserManager from "./components/admin/UserManager";
 import ProgressManager from "./components/admin/ProgressManager";
+import LoginNew from "./components/demo/LoginNew";
+import OTPVerification from "./components/demo/OTPVerification";
+import Dashboard1 from "./components/demo/Dashboard copy";
 
 function App() {
   // Lấy token và isPremium từ Context
@@ -30,11 +33,13 @@ function App() {
   return (
     <BrowserRouter>
       <div className="min-h-screen bg-background">
-        <Navbar />
+        {/* <Navbar /> */}
         <div>
           <Routes>
             <Route path="/" element={<Home />} />
-            <Route path="/login" element={<Login />} />
+            <Route path="/login" element={<LoginNew />} />
+            <Route path="/Dashboard" element={<Dashboard1 />} />
+            <Route path="/otp-verification" element={<OTPVerification />} />
             <Route path="/register" element={<Register />} />
             <Route
               path="/profile"
